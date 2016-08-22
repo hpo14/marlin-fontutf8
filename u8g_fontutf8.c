@@ -123,7 +123,7 @@ fontgroup_find (font_group_t * root, wchar_t val)
  *
  * Get the screen pixel length of a ROM UTF-8 string
  */
-static voi
+static void
 fontgroup_drawstring (font_group_t * group, font_t *fnt_default, const char *utf8_msg, read_byte_cb_t cb_read_byte, void * userdata, fontgroup_cb_draw_t cb_draw_ram)
 {
     int ret;
@@ -166,7 +166,8 @@ fontgroup_drawstring (font_group_t * group, font_t *fnt_default, const char *utf
 }
 
 ////////////////////////////////////////////////////////////
-char flag_fontgroup_inited = 0;
+static char flag_fontgroup_inited1 = 0;
+#define flag_fontgroup_inited flag_fontgroup_inited1
 static font_group_t g_fontgroup_root = {NULL, 0};
 
 /**
@@ -205,7 +206,7 @@ fontgroup_cb_draw_u8g (void *userdata, font_t *fnt_current, const char *msg)
         u8g_SetFontPosBottom (pdata->pu8g);
         pdata->fnt_prev = fnt_current;
     }
-    if (pdata->adv + u8g_GetStrPixelWidth(pdata->pu8g, (char *)msg) > ) {
+    if ((pdata->max_length != PIXEL_LEN_NOLIMIT) && (pdata->adv + u8g_GetStrPixelWidth(pdata->pu8g, (char *)msg) > pdata->max_length)) {
         return 1;
     }
     pdata->adv += u8g_DrawStr(pdata->pu8g, pdata->x + pdata->adv, pdata->y, (char *) msg);

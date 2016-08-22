@@ -11,12 +11,23 @@
  * Due to the limitation of the HD44780 hardware, the current available LCD modules can only support
  *   Western(English), Cyrillic(Russian), Kana(Japanese) charsets.
  */
+
+#include <string.h>
+
 #include "fontutils.h"
 #include "lcdprint.h"
 
 #if USE_HD44780
-//hd44780
 
+#if defined(ARDUINO)
+#include <LiquidCrystal.h>
+extern LiquidCrystal lcd;
+#define _lcd_write(a) lcd.write(a)
+#else
+#define _lcd_write(a) printf ("Write LCD: %c (%d)\n", (a), (int)(a));
+#endif
+
+////////////////////////////////////////////////////////////
 typedef struct _hd44780_charmap_t {
     wchar_t uchar;
     uint8_t idx;
@@ -431,9 +442,11 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
 #endif
 };
 
+
 void
 test_show_uchar()
 {
+#if ! defined(ARDUINO)
     wchar_t pre = 0;
     int i;
 
@@ -441,6 +454,7 @@ test_show_uchar()
         fprintf (stdout, "[% 2d] 0x%04X, 0x%02X%s\n", i, g_hd44780_charmap[i].uchar, (int)(g_hd44780_charmap[i].idx), (pre < g_hd44780_charmap[i].uchar?"":" <--- ERROR"));
         pre = g_hd44780_charmap[i].uchar;
     }
+#endif
 }
 
 void
@@ -476,13 +490,13 @@ pf_bsearch_cb_comp_hd4map_pgm (void *userdata, size_t idx, void * data_pin)
     hd44780_charmap_t localval;
     hd44780_charmap_t *p_hd44780_charmap = (hd44780_charmap_t *)userdata;
     memcpy_P (&localval, p_hd44780_charmap + idx, sizeof (localval));
-    return hd44780_charmap_compare (&localval, data_pin);
+    return hd44780_charmap_compare (&localval, (hd44780_charmap_t *)data_pin);
 }
 
 // return < 0 on error
 // return the advanced cols
 int
-lcd_print (wchar_t c)
+lcd_print_uchar (wchar_t c)
 {
     // find the HD44780 internal ROM first
     size_t idx = 0;
@@ -493,17 +507,18 @@ lcd_print (wchar_t c)
 
     // TODO: fix the '\\' that dont exist in the HD44870
     if (c < 128) {
-        //lcd.write ((uint8_t)c);
+        _lcd_write  ((uint8_t)c);
     }
     if (pf_bsearch_r ((void *)g_hd44780_charmap, NUM_TYPE(g_hd44780_charmap), pf_bsearch_cb_comp_hd4map_pgm, (void *)&pinval, &idx) >= 0) {
         // found
         memcpy_P (&localval, g_hd44780_charmap + idx, sizeof (localval));
         assert ((localval.uchar == c) && (localval.uchar == pinval.uchar));
-        //lcd.write (localval.idx);
+        TRACE ("draw char: %d at ROM %d", (int)c, (int)localval.idx);
+        _lcd_write  (localval.idx);
         return 1;
     }
     // print '?' instead
-    //lcd.write ((uint8_t)'?');
+    _lcd_write  ((uint8_t)'?');
     return 0;
 }
 
@@ -530,15 +545,16 @@ lcd_printstr_cb (const char * utf8_str, uint16_t len, uint8_t (*cb_read_byte)(ui
     pend = (uint8_t *)utf8_str + len;
     for (p = (uint8_t *)utf8_str; p < pend; ) {
         if (ret >= max_length) {
+            TRACE ("> max_lenght, quit");
             break;
         }
         ch = 0;
         p = get_utf8_value_cb (p, cb_read_byte, &ch);
         if (NULL == p) {
-            //TRACE("No more char, break ...");
+            TRACE("No more char, break ...");
             break;
         }
-        ret += lcd_print (ch);
+        ret += lcd_print_uchar (ch);
     }
     return ret;
 }

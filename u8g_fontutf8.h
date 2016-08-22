@@ -9,6 +9,7 @@
 #ifndef _UXG_FONTUTF8_H
 #define _UXG_FONTUTF8_H
 
+#include "u8g.h"
 #include "fontutils.h"
 
 #ifdef __cplusplus

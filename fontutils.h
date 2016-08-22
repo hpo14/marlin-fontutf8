@@ -9,7 +9,38 @@
 #ifndef _FONT_UTILS_H
 #define _FONT_UTILS_H
 
+
+#define DEBUG 1
+
+#if DEBUG
+
+#if defined(ARDUINO)
+#define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d " fmt " {ln:%d, fn:" __FILE__ "}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
+#define assert(a) if (!(a)) {TRACE("Assert: " # a ); }
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void serial_printf_P(const char *format, ...);
+#ifdef __cplusplus
+}
+#endif
+
+#else // ARDUINO
+#include <stdio.h>
+#include <stdlib.h>
+#define assert(a) if (!(a)) {printf("Assert: " # a); exit(1);}
+#define TRACE(fmt, ...) fprintf (stdout, "[%s()] " fmt " {ln:%d, fn:" __FILE__ "}\n", __func__, ##__VA_ARGS__, __LINE__)
+//#else
+//#define assert(a)
+//#define TRACE(...)
+#endif // ARDUINO
+
+#endif // DEBUG
+
+
 #if ! defined(__AVR__)
+#include <assert.h>
 #include <string.h>
 //#define pgm_read_word_near(a) *((uint16_t *)(a))
 #define pgm_read_word_near(a) (*(a))
@@ -19,12 +50,13 @@
 #define PROGMEM
 
 inline uint8_t
-pgm_read_byte(uint8_t * str)
+pgm_read_byte_near (uint8_t * str)
 {
     return *str;
 }
 #else
 #include <avr/pgmspace.h>
+#define assert(a)
 #endif
 
 // read a byte from ROM or RAM
@@ -35,17 +67,24 @@ read_byte_ram(uint8_t * str)
 {
     return *str;
 }
-#define read_byte_rom pgm_read_byte
 
+inline uint8_t
+read_byte_rom(uint8_t * str)
+{
+    return pgm_read_byte(str);
+}
 
+#include <stddef.h> // wchar_t
+#include <stdint.h> // uint32_t
 #if defined(ARDUINO)
 // there's overflow of the wchar_t due to the 2-byte size in Arduino
 // sizeof(wchar_t)=2; sizeof(size_t)=2; sizeof(uint32_t)=4;
 // sizeof(int)=2; sizeof(long)=4; sizeof(unsigned)=2;
+//#undef wchar_t
 #define wchar_t uint32_t
+//typedef uint32_t wchar_t;
 #else
 #include <sys/types.h> // ssize_t
-#include <stdint.h>
 #include <assert.h>
 // x86_64
 // sizeof(wchar_t)=4; sizeof(size_t)=8; sizeof(uint32_t)=4;
@@ -58,7 +97,7 @@ read_byte_ram(uint8_t * str)
 //#define pixel_len_t u8g_uint_t
 #define pixel_len_t uint16_t
 //#define pixel_len_t uint8_t
-#define PIXEL_LEN_NOLIMIT ((pixel_len_t)(-1))
+#define PIXEL_LEN_NOLIMIT (pixel_len_t)(-1)
 
 
 #define UNUSED_VARIABLE(a) ((void)(a))

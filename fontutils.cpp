@@ -7,18 +7,34 @@
  * @copyright GPL/BSD
  */
 
-#define FALSE 0
-#define TRUE  1
+#include "fontutils.h"
 
 #if DEBUG
-#include <stdio.h>
-#include <stdlib.h>
-#define assert(a) if (!(a)) {printf("Assert: " # a); exit(1);}
-#define TRACE(fmt, ...) fprintf (stdout, "[%s()] " fmt " {ln:%d, fn:" __FILE__ "}\n", __func__, ##__VA_ARGS__, __LINE__)
-#else
-#define assert(a)
-#define TRACE(...)
 #endif
+
+#if DEBUG
+#if defined(ARDUINO)
+#include <Arduino.h>
+#include <stdarg.h>
+
+void
+serial_printf_P (const char *format, ...)
+{
+    static char buff[128];
+    va_list args;
+    va_start (args,format);
+    vsnprintf_P(buff,sizeof(buff),format,args);
+    va_end (args);
+    buff[sizeof(buff)/sizeof(buff[0])-1]='\0';
+    Serial.print(buff);
+    //delay (1000);
+}
+#endif
+#endif
+
+
+#define FALSE 0
+#define TRUE  1
 
 
 #ifdef __WIN32__                // or whatever
@@ -113,7 +129,7 @@ pf_bsearch_r (void *userdata, size_t num_data, pf_bsearch_cb_comp_t cb_comp, voi
     } else if (ileft >= i + 2) {
         *ret_idx = i + 1;
     }
-    DBGMSG (PFDBG_CATLOG_PF, PFDBG_LEVEL_DEBUG, "not found! num_data=%"PRIuSZ"; ileft=%"PRIuSZ", iright=%"PRIuSZ", i=%"PRIuSZ"", num_data, ileft, iright, i);
+    //DBGMSG (PFDBG_CATLOG_PF, PFDBG_LEVEL_DEBUG, "not found! num_data=%"PRIuSZ"; ileft=%"PRIuSZ", iright=%"PRIuSZ", i=%"PRIuSZ"", num_data, ileft, iright, i);
     return -1;
 }
 

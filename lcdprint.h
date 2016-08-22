@@ -9,6 +9,9 @@
 #ifndef _LCDPRINT_H
 #define _LCDPRINT_H
 
+#include "syslang.h"
+#include "fontutils.h"
+
 #if USE_HD44780
 #define _UxGT(a) a
 #endif
@@ -47,6 +50,7 @@ int lcd_printstr_P (const char * utf8_str_P, pixel_len_t max_length);
 #define lcd_print(str)    lcd_printstr  (str, PIXEL_LEN_NOLIMIT)
 #define lcd_printPGM(str) lcd_printstr_P(str, PIXEL_LEN_NOLIMIT)
 
+void lcd_moveto (int col, int row);
 
 #ifdef __cplusplus
 }
