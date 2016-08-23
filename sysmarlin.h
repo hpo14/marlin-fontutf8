@@ -8,19 +8,19 @@
 #define WESTERN  2
 #define CYRILLIC 3
 
-//#define DISPLAY_CHARSET_HD44780 JAPANESE
+#define DISPLAY_CHARSET_HD44780 JAPANESE
 //#define DISPLAY_CHARSET_HD44780 WESTERN
-#define DISPLAY_CHARSET_HD44780 CYRILLIC
+//#define DISPLAY_CHARSET_HD44780 CYRILLIC
 
 
-#define LCD_LANGUAGE en
+//#define LCD_LANGUAGE en
 //#define LCD_LANGUAGE cn
-//#define LCD_LANGUAGE jp
+#define LCD_LANGUAGE jp
 //#define LCD_LANGUAGE ru
 
 
-//#define U8GLIB_SSD1306
-#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define U8GLIB_SSD1306
+//#define REPRAP_DISCOUNT_SMART_CONTROLLER
 //#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 
@@ -84,8 +84,8 @@
       #define LCD_HEIGHT 4
     #endif
   #else //no panel but just LCD
-    #if ENABLED(ULTRA_LCD)      #ifndef LCD_WIDTH
-
+    #if ENABLED(ULTRA_LCD)
+      #ifndef LCD_WIDTH
         #define LCD_WIDTH 16
       #endif
       #ifndef LCD_HEIGHT
@@ -311,4 +311,6 @@
   #endif // NEWPANEL
 
 #endif // ULTRA_LCD
+
+#endif // _SYS_MARLIN_H
 
