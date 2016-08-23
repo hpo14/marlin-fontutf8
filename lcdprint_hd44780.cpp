@@ -37,7 +37,78 @@ typedef struct _hd44780_charmap_t {
 
 static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     // sorted by uchar:
-#if DISPLAY_CHARSET_HD44780 == JAPANESE
+#if 0 /// DISPLAY_CHARSET_HD44780 == JAPANESE
+
+#if 0
+    // map CYRILLIC code to the glyph of HD44780 jp display module
+    {IV('А'), 'A'},
+    {IV('Б'), 'b'}, // error (0x01)
+    {IV('В'), 'B'},
+    {IV('Г'), 'T'}, // error (0x02)
+    {IV('Д'), 'Q'}, // error (0x03)
+    {IV('Е'), 'E'},
+    {IV('Ё'), 'E'}, // error 'E' + '``'(0xDE)
+    {IV('Ж'), 'E'}, // error 'E' + ''(0xC8)
+    {IV('З'), '3'},
+    {IV('И'), 'N'}, // error (0x05)
+    {IV('Й'), 'N'}, // error (0x05 + '`'0x60)
+    {IV('К'), 'K'},
+    {IV('Л'), 'T'}, // error (0x06)
+    {IV('М'), 'M'},
+    {IV('Н'), 'H'},
+    {IV('О'), 'O'},
+    {IV('П'), 'n'}, // error (0x04)
+    {IV('Р'), 'P'},
+    {IV('С'), 'C'},
+    {IV('Т'), 'T'},
+    {IV('У'), 'Y'},
+    {IV('Ф'), 'E'}, // error ('E' + '¢'0xEC)
+    {IV('Х'), 'X'},
+    {IV('Ц'), 'U'}, // error (0x07)
+    {IV('Ч'), 'u'}, // error ('ム'0xD1)
+    {IV('Ш'), 'W'},
+    {IV('Щ'), 'u'}, // error ('ミ'0xD0)
+    {IV('Ъ'), 'b'}, // error ('「'0xA2 + 'b')
+    {IV('Ы'), 'b'}, // error ('b' + '|'},
+    {IV('Ь'), 'b'},
+    {IV('Э'), 'E'}, // error ('ヨ'0xD6)
+    {IV('Ю'), 'O'}, // error ('ト'0xC4 + 'O'}
+    {IV('Я'), '9'}, // error ('9' + '|'}
+
+    {IV('а'), 'a'},
+    {IV('б'), '6'},
+    {IV('в'), 'b'}, // error ('β'0xE2)
+    {IV('г'), 'r'},
+    {IV('д'), 'o'}, // error (''0xE5)
+    {IV('е'), 'e'},
+    {IV('ё'), 'e'}, // error ('e'+''0xDE)
+    {IV('ж'), '*'},
+    {IV('з'), 'e'}, // error (''0xAE)
+    {IV('и'), 'u'},
+    {IV('й'), 'u'}, // error ('u' + ''0x60)
+    {IV('к'), 'k'},
+    {IV('л'), 'o'}, // error ('ハ'0xCA)
+    {IV('м'), 'm'},
+    {IV('н'), 'h'}, // error ('円'0xFC)
+    {IV('о'), 'o'},
+    {IV('п'), 'n'},
+    {IV('р'), 'p'},
+    {IV('с'), 'c'},
+    {IV('т'), 't'},
+    {IV('у'), 'y'},
+    {IV('ф'), 'q'+'p'},
+    {IV('х'), 'x'},
+    {IV('ц'), 'u'}, // error ('u' + ''0xA4)
+    {IV('ч'), 'u'}, // error (''0xF9)
+    {IV('ш'), 'w'},
+    {IV('щ'), 'w'}, // error ('ッ'0xAF)
+    {IV('ъ'), 'b'}, // error ('「'0xA2+'b')
+    {IV('ы'), 'b'}, // error ('b'+'|')
+    {IV('ь'), 'b'},
+    {IV('э'), 'e'}, // error ('ヲ'0xA6)
+    {IV('ю'), 'b'}, // error ('ェ'0xAA+'o')
+    {IV('я'), 'g'},
+#endif // 0
 
     {IV('¢'), 0xEC},
     {IV('ä'), 0xE1},
@@ -142,7 +213,7 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     {IV('千'), 0xFA},
     //{IV(''), 0xFE},
 
-#elif DISPLAY_CHARSET_HD44780 == WESTERN
+#elif 0 //DISPLAY_CHARSET_HD44780 == WESTERN
 // 0x10 -- 0x1F (except 0x1C)
 // 0x80 -- 0xFF (except 0xA7,0xB0,0xB1,0xB3,0xB4,0xBF,0xD1,0xF8,0xFA,0xFC-0xFF)
 
@@ -307,6 +378,7 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     //{IV(''), 0xFF}, // error
 
 #elif DISPLAY_CHARSET_HD44780 == CYRILLIC
+
     //{IV(''), 0x80},
     //{IV(''), 0x81},
     //{IV(''), 0x82},
@@ -342,31 +414,45 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     //{IV(''), 0x9F},
 
     {IV('Ё'), 0xA2},
+    {IV('А'), 'A'},
     {IV('Б'), 0xA0},
+    {IV('В'), 'B'},
     {IV('Г'), 0xA1},
     {IV('Д'), 0xE0},
+    {IV('Е'), 'E'},
     {IV('Ж'), 0xA3},
     {IV('З'), 0xA4},
     {IV('И'), 0xA5},
     {IV('Й'), 0xA6},
+    {IV('К'), 'K'},
     {IV('Л'), 0xA7},
+    {IV('М'), 'M'},
+    {IV('Н'), 'H'},
+    {IV('О'), 'O'},
     {IV('П'), 0xA8},
+    {IV('Р'), 'P'},
+    {IV('С'), 'C'},
+    {IV('Т'), 'T'},
     {IV('У'), 0xA9},
     {IV('Ф'), 0xAA},
+    {IV('Х'), 'X'},
     {IV('Ц'), 0xE1},
     {IV('Ч'), 0xAB},
     {IV('Ш'), 0xAC},
     {IV('Щ'), 0xE2},
     {IV('Ъ'), 0xAD},
     {IV('Ы'), 0xAE},
+    {IV('Ь'), 'b'},
     {IV('Э'), 0xAF},
-
     {IV('Ю'), 0xB0},
     {IV('Я'), 0xB1},
+    {IV('а'), 'a'},
+
     {IV('б'), 0xB2},
     {IV('в'), 0xB3},
     {IV('г'), 0xB4},
     {IV('д'), 0xE3},
+    {IV('е'), 'e'},
     {IV('ж'), 0xB6},
     {IV('з'), 0xB7},
     {IV('и'), 0xB8},
@@ -375,12 +461,17 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     {IV('л'), 0xBB},
     {IV('м'), 0xBC},
     {IV('н'), 0xBD},
+    {IV('о'), 'o'},
     {IV('п'), 0xBE},
+    {IV('р'), 'p'},
+    {IV('с'), 'c'},
     {IV('т'), 0xBF},
 
     {IV('у'), 0xC0},
     {IV('ф'), 0xE4},
+    {IV('х'), 'x'},
     {IV('ц'), 0xE5},
+    {IV('ч'), 'u'},
     {IV('ш'), 0xC1},
     {IV('щ'), 0xE6},
     {IV('ъ'), 0xC2},
