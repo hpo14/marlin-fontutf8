@@ -33,428 +33,439 @@ typedef struct _hd44780_charmap_t {
     uint8_t idx;
 } hd44780_charmap_t;
 
+#define IV(a) L##a
+
 static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     // sorted by uchar:
 #if DISPLAY_CHARSET_HD44780 == JAPANESE
-    //{'', 0xA0},
-    {'。', 0xA1},
-    {'「', 0xA2},
-    {'」', 0xA3},
-    {'ヽ', 0xA4},
-    {'・', 0xA5},
-    {'ヲ', 0xA6},
-    {'ァ', 0xA7},
-    {'ィ', 0xA8},
-    {'ゥ', 0xA9},
-    {'ェ', 0xAA},
-    {'ォ', 0xAB},
-    {'ャ', 0xAC},
-    {'ュ', 0xAD},
-    {'ョ', 0xAE},
-    {'ッ', 0xAF},
 
-    {'ー', 0xB0},
-    {'ア', 0xB1},
-    {'イ', 0xB2},
-    {'ウ', 0xB3},
-    {'エ', 0xB4},
-    {'オ', 0xB5},
-    {'カ', 0xB6},
-    {'キ', 0xB7},
-    {'ク', 0xB8},
-    {'ケ', 0xB9},
-    {'コ', 0xBA},
-    {'サ', 0xBB},
-    {'シ', 0xBC},
-    {'ス', 0xBD},
-    {'セ', 0xBE},
-    {'ソ', 0xBF},
+    {IV('¢'), 0xEC},
+    {IV('ä'), 0xE1},
+    {IV('ö'), 0xEF},
+    {IV('÷'), 0xFD},
+    {IV('ü'), 0xF5},
+    {IV('ˣ'), 0xEB},
+    {IV('Θ'), 0xF2},
+    {IV('Σ'), 0xF6},
+    {IV('Ω'), 0xF4},
+    {IV('α'), 0xE0},
+    {IV('β'), 0xE2},
+    {IV('ε'), 0xE3}, // epsilon
+    {IV('μ'), 0xE4}, // mu
+    {IV('π'), 0xF7},
+    {IV('ρ'), 0xE6}, // rho
+    {IV('σ'), 0xE5}, // sigma
+    {IV('√'), 0xE8},
+    {IV('∞'), 0xF3},
+    {IV('█'), 0xFF},
 
-    {'タ', 0xC0},
-    {'チ', 0xC1},
-    {'ツ', 0xC2},
-    {'テ', 0xC3},
-    {'ト', 0xC4},
-    {'ナ', 0xC5},
-    {'ニ', 0xC6},
-    {'ヌ', 0xC7},
-    {'ネ', 0xC8},
-    {'ノ', 0xC9},
-    {'ハ', 0xCA},
-    {'ヒ', 0xCB},
-    {'フ', 0xCC},
-    {'ヘ', 0xCD},
-    {'ホ', 0xCE},
-    {'マ', 0xCF},
+    //{IV(''), 0xA0},
+    {IV('。'), 0xA1},
+    {IV('「'), 0xA2},
+    {IV('」'), 0xA3},
+    {IV('〝'), 0xDE},
+    {IV('゜'), 0xDF},
+    {IV('ァ'), 0xA7},
+    {IV('ア'), 0xB1},
+    {IV('ィ'), 0xA8},
+    {IV('イ'), 0xB2},
+    {IV('ゥ'), 0xA9},
+    {IV('ウ'), 0xB3},
+    {IV('ェ'), 0xAA},
+    {IV('エ'), 0xB4},
+    {IV('ォ'), 0xAB},
 
-    {'ミ', 0xD0},
-    {'ム', 0xD1},
-    {'メ', 0xD2},
-    {'モ', 0xD3},
-    {'ヤ', 0xD4},
-    {'ユ', 0xD5},
-    {'ヨ', 0xD6},
-    {'ラ', 0xD7},
-    {'リ', 0xD8},
-    {'ル', 0xD9},
-    {'レ', 0xDA},
-    {'ロ', 0xDB},
-    {'ワ', 0xDC},
-    {'ン', 0xDD},
-    {'〝', 0xDE},
-    {'゜', 0xDF},
+    {IV('オ'), 0xB5},
+    {IV('カ'), 0xB6},
+    {IV('キ'), 0xB7},
+    {IV('ク'), 0xB8},
+    {IV('ケ'), 0xB9},
+    {IV('コ'), 0xBA},
+    {IV('サ'), 0xBB},
+    {IV('シ'), 0xBC},
+    {IV('ス'), 0xBD},
+    {IV('セ'), 0xBE},
+    {IV('ソ'), 0xBF},
 
-    {'α', 0xE0},
-    {'ä', 0xE1},
-    {'β', 0xE2},
-    {'ε', 0xE3}, // epsilon
-    {'μ', 0xE4}, // mu
-    {'σ', 0xE5}, // sigma
-    {'ρ', 0xE6}, // rho
-    //{'g', 0xE7}, // error
-    {'√', 0xE8},
-    //{'', 0xE9},
-    //{'j', 0xEA}, // error
-    {'ˣ', 0xEB},
-    {'¢', 0xEC},
-    //{'', 0xED},
-    //{'', 0xEE},
-    {'ö', 0xEF},
+    {IV('タ'), 0xC0},
+    {IV('チ'), 0xC1},
+    {IV('ッ'), 0xAF},
+    {IV('ツ'), 0xC2},
+    {IV('テ'), 0xC3},
+    {IV('ト'), 0xC4},
+    {IV('ナ'), 0xC5},
+    {IV('ニ'), 0xC6},
+    {IV('ヌ'), 0xC7},
+    {IV('ネ'), 0xC8},
+    {IV('ノ'), 0xC9},
+    {IV('ハ'), 0xCA},
+    {IV('ヒ'), 0xCB},
+    {IV('フ'), 0xCC},
+    {IV('ヘ'), 0xCD},
+    {IV('ホ'), 0xCE},
+    {IV('マ'), 0xCF},
 
-    //{'p', 0xF0}, // error
-    //{'q', 0xF1}, // error
-    {'Θ', 0xF2},
-    {'∞', 0xF3},
-    {'Ω', 0xF4},
-    {'ü', 0xF5},
-    {'Σ', 0xF6},
-    {'π', 0xF7},
-    //{'', 0xF8},
-    {'y', 0xF9}, // error
-    {'千', 0xFA},
-    {'万', 0xFB}, 
-    {'円', 0xFC},
-    {'÷', 0xFD},
-    //{'', 0xFE},
-    {'█', 0xFF},
+    {IV('ミ'), 0xD0},
+    {IV('ム'), 0xD1},
+    {IV('メ'), 0xD2},
+    {IV('モ'), 0xD3},
+    {IV('ャ'), 0xAC},
+    {IV('ヤ'), 0xD4},
+    {IV('ュ'), 0xAD},
+    {IV('ユ'), 0xD5},
+    {IV('ョ'), 0xAE},
+    {IV('ヨ'), 0xD6},
+    {IV('ラ'), 0xD7},
+    {IV('リ'), 0xD8},
+    {IV('ル'), 0xD9},
+    {IV('レ'), 0xDA},
+    {IV('ロ'), 0xDB},
+    {IV('ワ'), 0xDC},
+    {IV('ヲ'), 0xA6},
+    {IV('ン'), 0xDD},
+    {IV('・'), 0xA5},
+    {IV('ー'), 0xB0},
+    {IV('ヽ'), 0xA4},
+
+    //{IV('g'), 0xE7}, // error
+    //{IV(''), 0xE9},
+    //{IV('j'), 0xEA}, // error
+    //{IV(''), 0xED},
+    //{IV(''), 0xEE},
+
+    //{IV('p'), 0xF0}, // error
+    //{IV('q'), 0xF1}, // error
+    //{IV(''), 0xF8},
+    //{IV('y'), 0xF9}, // error
+    {IV('万'), 0xFB},
+    {IV('円'), 0xFC},
+    {IV('千'), 0xFA},
+    //{IV(''), 0xFE},
 
 #elif DISPLAY_CHARSET_HD44780 == WESTERN
 // 0x10 -- 0x1F (except 0x1C)
 // 0x80 -- 0xFF (except 0xA7,0xB0,0xB1,0xB3,0xB4,0xBF,0xD1,0xF8,0xFA,0xFC-0xFF)
 
-    {'¡', 0xA9},
-    {'¢', 0xA4},
-    {'£', 0xA5},
-    {'¥', 0xA6},
-    {'§', 0xD2}, // section sign
-    {'©', 0xCF},
+    {IV('¡'), 0xA9},
+    {IV('¢'), 0xA4},
+    {IV('£'), 0xA5},
+    {IV('¥'), 0xA6},
+    {IV('§'), 0xD2}, // section sign
+    {IV('©'), 0xCF},
 
-    {'ª', 0x9D},
-    {'«', 0xBB},
-    {'®', 0xCE},
+    {IV('ª'), 0x9D},
+    {IV('«'), 0xBB},
+    {IV('®'), 0xCE},
 
-    {'°', 0xB2},
-    //{'', 0xD1},
-    {'±', 0x10}, //∓±
-    //{'=', 0x1C}, // error
-    {'²', 0x1E},
-    {'³', 0x1F},
-    {'¶', 0xD3}, // pilcrow sign
-    {'º', 0x9E},
-    {'»', 0xBC},
-    //{'', 0xB3}, // error
-    //{'', 0xB4}, // error
-    {'¼', 0xB6},
-    {'½', 0xB5},
-    {'¿', 0x9F},
+    {IV('°'), 0xB2},
+    //{IV(''), 0xD1},
+    {IV('±'), 0x10}, //∓±
+    //{'='), 0x1C}, // error
+    {IV('²'), 0x1E},
+    {IV('³'), 0x1F},
+    {IV('¶'), 0xD3}, // pilcrow sign
+    {IV('º'), 0x9E},
+    {IV('»'), 0xBC},
+    //{IV(''), 0xB3}, // error
+    //{IV(''), 0xB4}, // error
+    {IV('¼'), 0xB6},
+    {IV('½'), 0xB5},
+    {IV('¿'), 0x9F},
 
-    {'Â', 0x8F},
-    {'Ã', 0xAA},
-    {'Ä', 0x8E},
-    {'Æ', 0x92},
-    {'Ç', 0x80},
-    {'É', 0x90},
-    {'Ñ', 0x9C},
-    {'Õ', 0xAC},
-    {'Ö', 0x99},
-    {'×', 0xB7},
-    {'Ø', 0xAE},
-    {'Ü', 0x9A},
-    {'à', 0x85},
-    {'á', 0xA0},
-    {'â', 0x83},
-    {'ã', 0xAB},
-    {'ä', 0x84},
-    {'å', 0x86},
-    {'æ', 0x91},
-    {'ç', 0x87},
-    {'è', 0x8A},
-    {'é', 0x82},
-    {'ê', 0x88},
-    {'ë', 0x89},
-    {'ì', 0x8D},
-    {'í', 0xA1},
-    {'î', 0x8C},
-    {'ï', 0x8B},
+    {IV('Â'), 0x8F},
+    {IV('Ã'), 0xAA},
+    {IV('Ä'), 0x8E},
+    {IV('Æ'), 0x92},
+    {IV('Ç'), 0x80},
+    {IV('É'), 0x90},
+    {IV('Ñ'), 0x9C},
+    {IV('Õ'), 0xAC},
+    {IV('Ö'), 0x99},
+    {IV('×'), 0xB7},
+    {IV('Ø'), 0xAE},
+    {IV('Ü'), 0x9A},
+    {IV('à'), 0x85},
+    {IV('á'), 0xA0},
+    {IV('â'), 0x83},
+    {IV('ã'), 0xAB},
+    {IV('ä'), 0x84},
+    {IV('å'), 0x86},
+    {IV('æ'), 0x91},
+    {IV('ç'), 0x87},
+    {IV('è'), 0x8A},
+    {IV('é'), 0x82},
+    {IV('ê'), 0x88},
+    {IV('ë'), 0x89},
+    {IV('ì'), 0x8D},
+    {IV('í'), 0xA1},
+    {IV('î'), 0x8C},
+    {IV('ï'), 0x8B},
 
-    {'ñ', 0x9B},
-    {'ò', 0x95},
-    {'ó', 0xA2},
-    {'ô', 0x93},
-    {'õ', 0xAD},
-    {'ö', 0x94},
-    {'÷', 0xB8},
-    {'ø', 0xAF},
-    {'ù', 0x97},
-    {'ú', 0xA3},
-    {'û', 0x96},
-    {'ü', 0x81},
-    {'ÿ', 0x98},
-
-
-    //{'', 0xB0}, // error
-    //{'', 0xB1}, // error
-    {'ƒ', 0xA8},
-
-    {'Γ', 0xD4}, // Gamma
-    {'Δ', 0xD5}, // Delta, ◿
-    {'Θ', 0xD6}, // Theta
-    {'Λ', 0xD7}, // Lambda
-    {'Ξ', 0xD8}, // Xi
-    {'Π', 0xD9}, // Pi
-    {'Σ', 0xDA}, // Sigma
-    {'Υ', 0xDB}, // Upsilon
-    {'Φ', 0xDC}, // Phi
-    {'Ψ', 0xDD}, // Psi
-    {'Ω', 0xDE}, // Omega
-    {'α', 0xDF}, // alpha
-
-    {'β', 0xE0}, // beta
-    {'γ', 0xE1}, // gamma
-    {'δ', 0xE2}, // delta
-    {'ε', 0xE3}, // epsilon
-    {'ζ', 0xE4}, // zeta
-    {'η', 0xE5}, // eta
-    {'θ', 0xE6}, // theta
-    {'ι', 0xE7}, // lota
-    {'κ', 0xE8}, // kappa
-    {'λ', 0xE9}, // lambda
-    {'μ', 0xEA}, // mu
-    {'ν', 0xEB}, // nu
-    {'ξ', 0xEC}, // xi
-    {'π', 0xED}, // pi
-    {'ρ', 0xEE}, // rho
-    {'σ', 0xEF}, // sigma
-
-    {'τ', 0xF0}, // tau
-    {'υ', 0xF1}, // upsilon
-    {'χ', 0xF2}, // chi
-    {'ψ', 0xF3}, // psi
-    {'ω', 0xF4}, // omega
-
-    {'•', 0xCD}, // ·
-    {'℞', 0xA7}, // ℞ Pt ASCII 158
-    {'™', 0xD0},
-    {'↤', 0xF9}, // ⟻
-    {'↵', 0xC4},
-    {'⇥', 0xFB},
-    {'√', 0xBE}, // √
-    {'∞', 0xC2}, // infinity
-    {'∫', 0x1B},
-    {'∼', 0x1D},
-    {'≈', 0x1A},
-    {'≠', 0xBD},
-    {'≡', 0x11},
-    {'≤', 0xB9},// ≤≥ ⩽⩾
-    {'≥', 0xBA},
-    //{'', 0xBF}, // error
-
-    {'⌠', 0xC0},
-    {'⌡', 0xC1},
-
-    {'⎧', 0x14},
-    {'⎩', 0x15},
-    {'⎫', 0x16},
-    {'⎭', 0x17},
-    {'⎰', 0x18},
-    {'⎱', 0x19},
-    {'⎲', 0x12},
-    {'⎳', 0x13},
-
-    {'┌', 0xC9},
-    {'┐', 0xCA},
-    {'└', 0xCB},
-    {'┘', 0xCC},
-    {'◸', 0xC3}, // ◿
-    {'⭠', 0xC8},
-    {'⭡', 0xC5},
-    {'⭢', 0xC7},
-    {'⭣', 0xC6},
+    {IV('ñ'), 0x9B},
+    {IV('ò'), 0x95},
+    {IV('ó'), 0xA2},
+    {IV('ô'), 0x93},
+    {IV('õ'), 0xAD},
+    {IV('ö'), 0x94},
+    {IV('÷'), 0xB8},
+    {IV('ø'), 0xAF},
+    {IV('ù'), 0x97},
+    {IV('ú'), 0xA3},
+    {IV('û'), 0x96},
+    {IV('ü'), 0x81},
+    {IV('ÿ'), 0x98},
 
 
-    {'⯆', 0xF5},
-    {'⯇', 0xF7}, // ⯅
-    {'⯈', 0xF6},
-    //{'', 0xF8}, // error
-    //{'', 0xFA}, // error
-    //{'', 0xFC}, // error
-    //{'', 0xFD}, // error
-    //{'', 0xFE}, // error
-    //{'', 0xFF}, // error
+    //{IV(''), 0xB0}, // error
+    //{IV(''), 0xB1}, // error
+    {IV('ƒ'), 0xA8},
+
+    {IV('Γ'), 0xD4}, // Gamma
+    {IV('Δ'), 0xD5}, // Delta, ◿
+    {IV('Θ'), 0xD6}, // Theta
+    {IV('Λ'), 0xD7}, // Lambda
+    {IV('Ξ'), 0xD8}, // Xi
+    {IV('Π'), 0xD9}, // Pi
+    {IV('Σ'), 0xDA}, // Sigma
+    {IV('Υ'), 0xDB}, // Upsilon
+    {IV('Φ'), 0xDC}, // Phi
+    {IV('Ψ'), 0xDD}, // Psi
+    {IV('Ω'), 0xDE}, // Omega
+    {IV('α'), 0xDF}, // alpha
+
+    {IV('β'), 0xE0}, // beta
+    {IV('γ'), 0xE1}, // gamma
+    {IV('δ'), 0xE2}, // delta
+    {IV('ε'), 0xE3}, // epsilon
+    {IV('ζ'), 0xE4}, // zeta
+    {IV('η'), 0xE5}, // eta
+    {IV('θ'), 0xE6}, // theta
+    {IV('ι'), 0xE7}, // lota
+    {IV('κ'), 0xE8}, // kappa
+    {IV('λ'), 0xE9}, // lambda
+    {IV('μ'), 0xEA}, // mu
+    {IV('ν'), 0xEB}, // nu
+    {IV('ξ'), 0xEC}, // xi
+    {IV('π'), 0xED}, // pi
+    {IV('ρ'), 0xEE}, // rho
+    {IV('σ'), 0xEF}, // sigma
+
+    {IV('τ'), 0xF0}, // tau
+    {IV('υ'), 0xF1}, // upsilon
+    {IV('χ'), 0xF2}, // chi
+    {IV('ψ'), 0xF3}, // psi
+    {IV('ω'), 0xF4}, // omega
+
+    {IV('•'), 0xCD}, // ·
+    {IV('℞'), 0xA7}, // ℞ Pt ASCII 158
+    {IV('™'), 0xD0},
+    {IV('↤'), 0xF9}, // ⟻
+    {IV('↵'), 0xC4},
+    {IV('⇥'), 0xFB},
+    {IV('√'), 0xBE}, // √
+    {IV('∞'), 0xC2}, // infinity
+    {IV('∫'), 0x1B},
+    {IV('∼'), 0x1D},
+    {IV('≈'), 0x1A},
+    {IV('≠'), 0xBD},
+    {IV('≡'), 0x11},
+    {IV('≤'), 0xB9},// ≤≥ ⩽⩾
+    {IV('≥'), 0xBA},
+    //{IV(''), 0xBF}, // error
+
+    {IV('⌠'), 0xC0},
+    {IV('⌡'), 0xC1},
+
+    {IV('⎧'), 0x14},
+    {IV('⎩'), 0x15},
+    {IV('⎫'), 0x16},
+    {IV('⎭'), 0x17},
+    {IV('⎰'), 0x18},
+    {IV('⎱'), 0x19},
+    {IV('⎲'), 0x12},
+    {IV('⎳'), 0x13},
+
+    {IV('┌'), 0xC9},
+    {IV('┐'), 0xCA},
+    {IV('└'), 0xCB},
+    {IV('┘'), 0xCC},
+    {IV('◸'), 0xC3}, // ◿
+    {IV('⭠'), 0xC8},
+    {IV('⭡'), 0xC5},
+    {IV('⭢'), 0xC7},
+    {IV('⭣'), 0xC6},
+
+
+    {IV('⯆'), 0xF5},
+    {IV('⯇'), 0xF7}, // ⯅
+    {IV('⯈'), 0xF6},
+    //{IV(''), 0xF8}, // error
+    //{IV(''), 0xFA}, // error
+    //{IV(''), 0xFC}, // error
+    //{IV(''), 0xFD}, // error
+    //{IV(''), 0xFE}, // error
+    //{IV(''), 0xFF}, // error
 
 #elif DISPLAY_CHARSET_HD44780 == CYRILLIC
-    //{'', 0x80},
-    //{'', 0x81},
-    //{'', 0x82},
-    //{'', 0x83},
-    //{'', 0x84},
-    //{'', 0x85},
-    //{'', 0x86},
-    //{'', 0x87},
-    //{'', 0x88},
-    //{'', 0x89},
-    //{'', 0x8A},
-    //{'', 0x8B},
-    //{'', 0x8C},
-    //{'', 0x8D},
-    //{'', 0x8E},
-    //{'', 0x8F},
+    //{IV(''), 0x80},
+    //{IV(''), 0x81},
+    //{IV(''), 0x82},
+    //{IV(''), 0x83},
+    //{IV(''), 0x84},
+    //{IV(''), 0x85},
+    //{IV(''), 0x86},
+    //{IV(''), 0x87},
+    //{IV(''), 0x88},
+    //{IV(''), 0x89},
+    //{IV(''), 0x8A},
+    //{IV(''), 0x8B},
+    //{IV(''), 0x8C},
+    //{IV(''), 0x8D},
+    //{IV(''), 0x8E},
+    //{IV(''), 0x8F},
 
-    //{'', 0x90},
-    //{'', 0x91},
-    //{'', 0x92},
-    //{'', 0x93},
-    //{'', 0x94},
-    //{'', 0x95},
-    //{'', 0x96},
-    //{'', 0x97},
-    //{'', 0x98},
-    //{'', 0x99},
-    //{'', 0x9A},
-    //{'', 0x9B},
-    //{'', 0x9C},
-    //{'', 0x9D},
-    //{'', 0x9E},
-    //{'', 0x9F},
+    //{IV(''), 0x90},
+    //{IV(''), 0x91},
+    //{IV(''), 0x92},
+    //{IV(''), 0x93},
+    //{IV(''), 0x94},
+    //{IV(''), 0x95},
+    //{IV(''), 0x96},
+    //{IV(''), 0x97},
+    //{IV(''), 0x98},
+    //{IV(''), 0x99},
+    //{IV(''), 0x9A},
+    //{IV(''), 0x9B},
+    //{IV(''), 0x9C},
+    //{IV(''), 0x9D},
+    //{IV(''), 0x9E},
+    //{IV(''), 0x9F},
 
-    {'Ё', 0xA2},
-    {'Б', 0xA0},
-    {'Г', 0xA1},
-    {'Д', 0xE0},
-    {'Ж', 0xA3},
-    {'З', 0xA4},
-    {'И', 0xA5},
-    {'Й', 0xA6},
-    {'Л', 0xA7},
-    {'П', 0xA8},
-    {'У', 0xA9},
-    {'Ф', 0xAA},
-    {'Ц', 0xE1},
-    {'Ч', 0xAB},
-    {'Ш', 0xAC},
-    {'Щ', 0xE2},
-    {'Ъ', 0xAD},
-    {'Ы', 0xAE},
-    {'Э', 0xAF},
+    {IV('Ё'), 0xA2},
+    {IV('Б'), 0xA0},
+    {IV('Г'), 0xA1},
+    {IV('Д'), 0xE0},
+    {IV('Ж'), 0xA3},
+    {IV('З'), 0xA4},
+    {IV('И'), 0xA5},
+    {IV('Й'), 0xA6},
+    {IV('Л'), 0xA7},
+    {IV('П'), 0xA8},
+    {IV('У'), 0xA9},
+    {IV('Ф'), 0xAA},
+    {IV('Ц'), 0xE1},
+    {IV('Ч'), 0xAB},
+    {IV('Ш'), 0xAC},
+    {IV('Щ'), 0xE2},
+    {IV('Ъ'), 0xAD},
+    {IV('Ы'), 0xAE},
+    {IV('Э'), 0xAF},
 
-    {'Ю', 0xB0},
-    {'Я', 0xB1},
-    {'б', 0xB2},
-    {'в', 0xB3},
-    {'г', 0xB4},
-    {'д', 0xE3},
-    {'ж', 0xB6},
-    {'з', 0xB7},
-    {'и', 0xB8},
-    {'й', 0xB9},
-    {'к', 0xBA}, //клмноп
-    {'л', 0xBB},
-    {'м', 0xBC},
-    {'н', 0xBD},
-    {'п', 0xBE},
-    {'т', 0xBF},
+    {IV('Ю'), 0xB0},
+    {IV('Я'), 0xB1},
+    {IV('б'), 0xB2},
+    {IV('в'), 0xB3},
+    {IV('г'), 0xB4},
+    {IV('д'), 0xE3},
+    {IV('ж'), 0xB6},
+    {IV('з'), 0xB7},
+    {IV('и'), 0xB8},
+    {IV('й'), 0xB9},
+    {IV('к'), 0xBA}, //клмноп
+    {IV('л'), 0xBB},
+    {IV('м'), 0xBC},
+    {IV('н'), 0xBD},
+    {IV('п'), 0xBE},
+    {IV('т'), 0xBF},
 
-    {'у', 0xC0},
-    {'ф', 0xE4},
-    {'ц', 0xE5},
-    {'ш', 0xC1},
-    {'щ', 0xE6},
-    {'ъ', 0xC2},
-    {'ы', 0xC3},
-    {'ь', 0xC4},
-    {'э', 0xC5},
-    {'ю', 0xC6},
-    {'я', 0xC7},
-    {'ё', 0xB5},
-    //{'', 0xC8},
-    //{'', 0xC9},
-    //{'', 0xCA},
-    //{'', 0xCB},
-    //{'', 0xCC},
-    //{'', 0xCD},
-    //{'', 0xCE},
-    //{'', 0xCF},
+    {IV('у'), 0xC0},
+    {IV('ф'), 0xE4},
+    {IV('ц'), 0xE5},
+    {IV('ш'), 0xC1},
+    {IV('щ'), 0xE6},
+    {IV('ъ'), 0xC2},
+    {IV('ы'), 0xC3},
+    {IV('ь'), 0xC4},
+    {IV('э'), 0xC5},
+    {IV('ю'), 0xC6},
+    {IV('я'), 0xC7},
+    {IV('ё'), 0xB5},
+    //{IV(''), 0xC8},
+    //{IV(''), 0xC9},
+    //{IV(''), 0xCA},
+    //{IV(''), 0xCB},
+    //{IV(''), 0xCC},
+    //{IV(''), 0xCD},
+    //{IV(''), 0xCE},
+    //{IV(''), 0xCF},
 
-    //{'', 0xD0},
-    //{'', 0xD1},
-    //{'', 0xD2},
-    //{'', 0xD3},
-    //{'', 0xD4},
-    //{'', 0xD5},
-    //{'', 0xD6},
-    //{'', 0xD7},
-    //{'', 0xD8},
-    //{'', 0xD9},
-    //{'', 0xDA},
-    //{'', 0xDB},
-    //{'', 0xDC},
-    //{'', 0xDD},
-    //{'', 0xDE},
-    //{'', 0xDF},
+    //{IV(''), 0xD0},
+    //{IV(''), 0xD1},
+    //{IV(''), 0xD2},
+    //{IV(''), 0xD3},
+    //{IV(''), 0xD4},
+    //{IV(''), 0xD5},
+    //{IV(''), 0xD6},
+    //{IV(''), 0xD7},
+    //{IV(''), 0xD8},
+    //{IV(''), 0xD9},
+    //{IV(''), 0xDA},
+    //{IV(''), 0xDB},
+    //{IV(''), 0xDC},
+    //{IV(''), 0xDD},
+    //{IV(''), 0xDE},
+    //{IV(''), 0xDF},
 
-    //{'', 0xE7},
-    //{'', 0xE8},
-    //{'', 0xE9},
-    //{'', 0xEA},
-    //{'', 0xEB},
-    //{'', 0xEC},
-    //{'', 0xED},
-    //{'', 0xEE},
-    //{'', 0xEF},
+    //{IV(''), 0xE7},
+    //{IV(''), 0xE8},
+    //{IV(''), 0xE9},
+    //{IV(''), 0xEA},
+    //{IV(''), 0xEB},
+    //{IV(''), 0xEC},
+    //{IV(''), 0xED},
+    //{IV(''), 0xEE},
+    //{IV(''), 0xEF},
 
-    //{'', 0xF0},
-    //{'', 0xF1},
-    //{'', 0xF2},
-    //{'', 0xF3},
-    //{'', 0xF4},
-    //{'', 0xF5},
-    //{'', 0xF6},
-    //{'', 0xF7},
-    //{'', 0xF8},
-    //{'', 0xF9},
-    //{'', 0xFA},
-    //{'', 0xFB},
-    //{'', 0xFC},
-    //{'', 0xFD},
-    //{'', 0xFE},
-    //{'', 0xFF},
+    //{IV(''), 0xF0},
+    //{IV(''), 0xF1},
+    //{IV(''), 0xF2},
+    //{IV(''), 0xF3},
+    //{IV(''), 0xF4},
+    //{IV(''), 0xF5},
+    //{IV(''), 0xF6},
+    //{IV(''), 0xF7},
+    //{IV(''), 0xF8},
+    //{IV(''), 0xF9},
+    //{IV(''), 0xFA},
+    //{IV(''), 0xFB},
+    //{IV(''), 0xFC},
+    //{IV(''), 0xFD},
+    //{IV(''), 0xFE},
+    //{IV(''), 0xFF},
 
 #endif
 };
 
-
 void
 test_show_uchar()
 {
-#if ! defined(ARDUINO)
     wchar_t pre = 0;
+    hd44780_charmap_t cur;
     int i;
 
     for (i = 0; i < NUM_TYPE(g_hd44780_charmap); i ++) {
-        fprintf (stdout, "[% 2d] 0x%04X, 0x%02X%s\n", i, g_hd44780_charmap[i].uchar, (int)(g_hd44780_charmap[i].idx), (pre < g_hd44780_charmap[i].uchar?"":" <--- ERROR"));
-        pre = g_hd44780_charmap[i].uchar;
-    }
+        memcpy_P (&cur, g_hd44780_charmap + i, sizeof(cur));
+        //fprintf (stdout, "[% 2d] 0x%04X, 0x%02X%s\n", i, cur.uchar, (int)(cur.idx), (pre < cur.uchar?"":" <--- ERROR"));
+#if 1
+        TRACE("[% 2d] 0x%04X, 0x%02X%s", i, cur.uchar, (unsigned int)(cur.idx), (pre < cur.uchar?"":" <--- ERROR"));
+#else
+        TRACE("[% 2d]", i);
+        TRACE("0x%04X,", cur.uchar);
+        TRACE("0x%02X,", (unsigned int)(cur.idx));
+        TRACE("%s", (pre < cur.uchar?"":" <--- ERROR"));
 #endif
+        pre = cur.uchar;
+    }
 }
 
 void
@@ -469,9 +480,13 @@ hd44780_charmap_compare (hd44780_charmap_t * v1, hd44780_charmap_t * v2)
 {
     assert (NULL != v1);
     assert (NULL != v2);
+    TRACE ("compare char1(0x%X)", v1->uchar);
+    TRACE ("compare char2(0x%X)", v2->uchar);
     if (v1->uchar < v2->uchar) {
+        TRACE ("compare return -1");
         return -1;
     } else if (v1->uchar > v2->uchar) {
+        TRACE ("compare return 1");
         return 1;
     }
 #if 0
@@ -481,6 +496,7 @@ hd44780_charmap_compare (hd44780_charmap_t * v1, hd44780_charmap_t * v2)
         return 1;
     }
 #endif
+    TRACE ("compare return 0");
     return 0;
 }
 
@@ -507,7 +523,9 @@ lcd_print_uchar (wchar_t c)
 
     // TODO: fix the '\\' that dont exist in the HD44870
     if (c < 128) {
+        TRACE ("draw char: regular %d", (int)c);
         _lcd_write  ((uint8_t)c);
+        return 1;
     }
     if (pf_bsearch_r ((void *)g_hd44780_charmap, NUM_TYPE(g_hd44780_charmap), pf_bsearch_cb_comp_hd4map_pgm, (void *)&pinval, &idx) >= 0) {
         // found
@@ -518,6 +536,7 @@ lcd_print_uchar (wchar_t c)
         return 1;
     }
     // print '?' instead
+    TRACE ("draw char: Not found %d (0x%X", (int)c, (int)c);
     _lcd_write  ((uint8_t)'?');
     return 0;
 }
@@ -542,6 +561,7 @@ lcd_printstr_cb (const char * utf8_str, uint16_t len, uint8_t (*cb_read_byte)(ui
     uint8_t *pend;
     int ret = 0;
 
+    TRACE ("BEGIN lcd_printstr_cb(len=%d, maxlen=%d)", len, max_length);
     pend = (uint8_t *)utf8_str + len;
     for (p = (uint8_t *)utf8_str; p < pend; ) {
         if (ret >= max_length) {
@@ -562,12 +582,19 @@ lcd_printstr_cb (const char * utf8_str, uint16_t len, uint8_t (*cb_read_byte)(ui
 int
 lcd_printstr (const char * utf8_str, pixel_len_t max_length)
 {
+    //TRACE ("BEGIN lcd_printstr(str='%s', len=%d, maxlen=%d)", utf8_str, strlen(utf8_str), max_length);
+    TRACE ("BEGIN lcd_printstr(str='%s')", utf8_str);
+    TRACE ("BEGIN lcd_printstr('len=%d)", strlen(utf8_str));
+    TRACE ("BEGIN lcd_printstr(maxlen=%d)", max_length);
     return lcd_printstr_cb(utf8_str, strlen(utf8_str), read_byte_ram, max_length);
 }
 
 int
 lcd_printstr_P (const char * utf8_str_P, pixel_len_t max_length)
 {
+    //TRACE ("BEGIN lcd_printstr_P('%s', len=%d, maxlen=%d)", utf8_str_P, strlen_P(utf8_str_P), max_length);
+    TRACE ("BEGIN lcd_printstr_P(len=%d)", strlen_P(utf8_str_P));
+    TRACE ("BEGIN lcd_printstr_P(maxlen=%d)", max_length);
     return lcd_printstr_cb(utf8_str_P, strlen_P(utf8_str_P), read_byte_rom, max_length);
 }
 

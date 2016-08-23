@@ -83,7 +83,7 @@
 #define LCD_COL 16
 #define LCD_ROW  2
 
-#if 1
+#if 0
 #undef LCD_COL
 #undef LCD_ROW
 #define LCD_COL 20
@@ -126,10 +126,12 @@ const char c24[] PROGMEM = MSG_SAMPLE1_CNZH;
 const char c25[] PROGMEM = MSG_SAMPLE1_CNTW;
 const char c26[] PROGMEM = MSG_SAMPLE1_FR;
 
+const char c27[] PROGMEM = "千万円";
+
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
 #if 1
-    c01,c02,c03,c04,c05,c06, 
+    c27, c01,c02,c03,c04,c05,c06, 
 #elif 1
     c11,c12,c13,
     c21,c22,c23,
@@ -150,6 +152,8 @@ PGM_P const g_cstr_samples[] PROGMEM = {
 //    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
 LiquidCrystal lcd(PIN_LCD_RS, PIN_LCD_RW, PIN_LCD_EN,   PIN_LCD_D4, PIN_LCD_D5, PIN_LCD_D6, PIN_LCD_D7);
 
+extern void test_show_uchar();
+
 void
 setup_lcd ()
 {
@@ -158,11 +162,13 @@ setup_lcd ()
     lcd.begin(LCD_COL, LCD_ROW);
     // Print a message to the LCD.
     //lcd.print("hello, world!");
+    lcd_print ("hello");
     lcd_printPGM (PSTR("HELLO"));
+    test_show_uchar();
     delay (2000);
 }
 
-static int pre_tm_lcd = 0;
+static unsigned long pre_tm_lcd = 0;
 static int cnt_lcd = 0;
 int
 test_lcd(void)
@@ -179,9 +185,25 @@ test_lcd(void)
             lcd_printPGM (p);
         }
     }
+    delay (500);
     return 1;
 }
 
+#else
+// use u8g
+
+U8GLIB *pu8g = NULL;
+
+
+void
+setup_lcd ()
+{
+}
+
+int
+test_lcd(void)
+{
+}
 #endif // USE_HD44780
 
 /////////////////////////////////////////////////////////////////////////////
@@ -208,7 +230,6 @@ void
 loop(void)
 {
     //lcd_update();
-    TRACE ("test main");
     test_lcd ();
 }
 

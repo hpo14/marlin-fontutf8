@@ -9,51 +9,27 @@
 #ifndef _FONT_UTILS_H
 #define _FONT_UTILS_H
 
-
 #define DEBUG 1
 
-#if DEBUG
-
 #if defined(ARDUINO)
-#define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d " fmt " {ln:%d, fn:" __FILE__ "}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
-#define assert(a) if (!(a)) {TRACE("Assert: " # a ); }
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-void serial_printf_P(const char *format, ...);
-#ifdef __cplusplus
-}
-#endif
-
+#include <Arduino.h>
 #else // ARDUINO
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define assert(a) if (!(a)) {printf("Assert: " # a); exit(1);}
-#define TRACE(fmt, ...) fprintf (stdout, "[%s()] " fmt " {ln:%d, fn:" __FILE__ "}\n", __func__, ##__VA_ARGS__, __LINE__)
-//#else
-//#define assert(a)
-//#define TRACE(...)
 #endif // ARDUINO
 
-#endif // DEBUG
-
-
 #if ! defined(__AVR__)
-#include <assert.h>
+#include <stdint.h>
 #include <string.h>
+#include <assert.h>
 //#define pgm_read_word_near(a) *((uint16_t *)(a))
 #define pgm_read_word_near(a) (*(a))
 #define pgm_read_byte_near(a) *((uint8_t *)(a))
+#define pgm_read_byte pgm_read_byte_near
 #define strlen_P strlen
 #define memcpy_P memcpy
 #define PROGMEM
-
-inline uint8_t
-pgm_read_byte_near (uint8_t * str)
-{
-    return *str;
-}
 #else
 #include <avr/pgmspace.h>
 #define assert(a)
@@ -115,6 +91,35 @@ int pf_bsearch_r (void *userdata, size_t num_data, pf_bsearch_cb_comp_t cb_comp,
 //uint8_t * get_utf8_value (uint8_t *pstart, wchar_t *pval);
 //uint8_t * get_utf8_value_cb (uint8_t *pstart, uint8_t (*cb_read_byte)(uint8_t * str), wchar_t *pval);
 uint8_t * get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval);
+
+
+#if DEBUG
+#if defined(ARDUINO)
+//#define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d " fmt " {ln:%d, fn:" __FILE__ "}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
+#define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d %d " fmt " {ln:%d;}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
+#define assert(a) if (!(a)) {TRACE("Assert: " # a ); }
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void serial_printf_P(const char *format, ...);
+#ifdef __cplusplus
+}
+#endif
+
+#else // ARDUINO
+#define assert(a) if (!(a)) {printf("Assert: " # a); exit(1);}
+#define TRACE(fmt, ...) fprintf (stdout, "[%s()] " fmt " {ln:%d, fn:" __FILE__ "}\n", __func__, ##__VA_ARGS__, __LINE__)
+//#else
+//#define assert(a)
+//#define TRACE(...)
+#endif // ARDUINO
+
+#else // DEBUG
+#define TRACE(fmt, ...)
+#define assert(a)
+#endif // DEBUG
+
 
 #ifdef __cplusplus
 }

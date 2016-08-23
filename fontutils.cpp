@@ -10,9 +10,6 @@
 #include "fontutils.h"
 
 #if DEBUG
-#endif
-
-#if DEBUG
 #if defined(ARDUINO)
 #include <Arduino.h>
 #include <stdarg.h>

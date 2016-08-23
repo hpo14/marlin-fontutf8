@@ -14,10 +14,14 @@
 
 ////////////////////////////////////////////////////////////
 #if ! USE_HD44780
+
+#include <U8glib.h>
+extern U8GLIB *pu8g;
+
 void
 lcd_moveto (int col, int row)
 {
-    u8g.setPrintPos (col, row);
+    pu8g->setPrintPos (col, row);
 }
 
 int
@@ -27,10 +31,10 @@ lcd_printstr (const char * utf8_str, pixel_len_t max_length)
     unsigned int x;
     unsigned int y;
 
-    x = u8g.getPrintCol();
-    y = u8g.getPrintRow();
-    ret = uxg_DrawUtf8Str (u8g.getU8g(), x, y, utf8_str, max_length);
-    u8g.setPrintPos (x + ret, y);
+    x = pu8g->getPrintCol();
+    y = pu8g->getPrintRow();
+    ret = uxg_DrawUtf8Str (pu8g->getU8g(), x, y, utf8_str, max_length);
+    pu8g->setPrintPos (x + ret, y);
 
     return ret;
 }
@@ -42,10 +46,10 @@ lcd_printstr_P (const char * utf8_str_P, pixel_len_t max_length)
     unsigned int x;
     unsigned int y;
 
-    x = u8g.getPrintCol();
-    y = u8g.getPrintRow();
-    ret = uxg_DrawUtf8StrP (u8g.getU8g(), x, y, utf8_str_P, max_length);
-    u8g.setPrintPos (x + ret, y);
+    x = pu8g->getPrintCol();
+    y = pu8g->getPrintRow();
+    ret = uxg_DrawUtf8StrP (pu8g->getU8g(), x, y, utf8_str_P, max_length);
+    pu8g->setPrintPos (x + ret, y);
 
     return ret;
 }
