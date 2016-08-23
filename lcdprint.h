@@ -14,6 +14,8 @@
 
 #if USE_HD44780
 #define _UxGT(a) a
+#else
+#include "u8g_fontutf8.h"
 #endif
 
 #ifdef __cplusplus

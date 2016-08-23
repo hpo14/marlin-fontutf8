@@ -4,7 +4,6 @@
 #include "syslang.h"
 #include "sysmarlin.h"
 
-
 // LCD Menu Messages
 #define LANGUAGE_INCL_(M) STRINGIFY_(language_##M.h)
 #define LANGUAGE_INCL(M) LANGUAGE_INCL_(M)

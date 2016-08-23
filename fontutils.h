@@ -9,7 +9,8 @@
 #ifndef _FONT_UTILS_H
 #define _FONT_UTILS_H
 
-#define DEBUG 1
+#define DEBUG 0
+
 
 #if defined(ARDUINO)
 #include <Arduino.h>
@@ -35,20 +36,21 @@
 #define assert(a)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // read a byte from ROM or RAM
 typedef uint8_t (* read_byte_cb_t)(uint8_t * str);
 
-inline uint8_t
-read_byte_ram(uint8_t * str)
-{
-    return *str;
-}
+//inline uint8_t read_byte_ram(uint8_t * str) { return *str; }
+//inline uint8_t read_byte_rom(uint8_t * str) { return pgm_read_byte(str); }
+uint8_t read_byte_ram(uint8_t * str);
+uint8_t read_byte_rom(uint8_t * str);
 
-inline uint8_t
-read_byte_rom(uint8_t * str)
-{
-    return pgm_read_byte(str);
+#ifdef __cplusplus
 }
+#endif
 
 #include <stddef.h> // wchar_t
 #include <stdint.h> // uint32_t

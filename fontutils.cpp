@@ -9,6 +9,18 @@
 
 #include "fontutils.h"
 
+uint8_t
+read_byte_ram(uint8_t * str)
+{
+    return *str;
+}
+
+uint8_t
+read_byte_rom(uint8_t * str)
+{
+    return pgm_read_byte(str);
+}
+
 #if DEBUG
 #if defined(ARDUINO)
 #include <Arduino.h>

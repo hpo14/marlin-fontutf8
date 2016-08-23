@@ -594,7 +594,7 @@ test_show_uchar()
 void
 lcd_moveto (int col, int row)
 {
-    //lcd.setCursor(col, row);
+    lcd.setCursor(col, row);
 }
 
 /* return v1 - v2 */

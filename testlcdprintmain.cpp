@@ -106,19 +106,20 @@
 #define MSG_SAMPLE2_CNTW _UxGT("你做得很好！")
 #define MSG_SAMPLE2_FR   _UxGT("Vous avez fait un très bon travail!")
 
-
 const char c01[] PROGMEM = WELCOME_MSG;
 const char c02[] PROGMEM = MSG_SD_INSERTED;
 const char c03[] PROGMEM = MSG_SD_REMOVED;
 const char c04[] PROGMEM = MSG_LCD_ENDSTOPS;
 const char c05[] PROGMEM = MSG_MAIN;
 const char c06[] PROGMEM = MSG_AUTOSTART;
+
 const char c11[] PROGMEM = MSG_SAMPLE1_EN;
 const char c12[] PROGMEM = MSG_SAMPLE1_RU;
 const char c13[] PROGMEM = MSG_SAMPLE1_JP;
 const char c14[] PROGMEM = MSG_SAMPLE1_CNZH;
 const char c15[] PROGMEM = MSG_SAMPLE1_CNTW;
 const char c16[] PROGMEM = MSG_SAMPLE1_FR;
+
 const char c21[] PROGMEM = MSG_SAMPLE1_EN;
 const char c22[] PROGMEM = MSG_SAMPLE1_RU;
 const char c23[] PROGMEM = MSG_SAMPLE1_JP;
@@ -126,21 +127,37 @@ const char c24[] PROGMEM = MSG_SAMPLE1_CNZH;
 const char c25[] PROGMEM = MSG_SAMPLE1_CNTW;
 const char c26[] PROGMEM = MSG_SAMPLE1_FR;
 
-const char c27[] PROGMEM = "千万円";
+const char c27[] PROGMEM = _UxGT("千万円");
 
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
-#if 1
-    c27, c01,c02,c03,c04,c05,c06, 
-#elif 1
-    c11,c12,c13,
-    c21,c22,c23,
-#else
+    //PSTR(MSG_SAMPLE2_FR),
+    c27,
+    c01,c02,c03,c04,c05,c06,
+#if ! USE_HD44780
     c11,c12,c13,c14,c15,c16,
     c21,c22,c23,c24,c25,c26,
 #endif
-    //PSTR(MSG_SAMPLE2_FR),
 };
+
+static int cnt_lcd = 0;
+void
+update_idx ()
+{
+    cnt_lcd = (cnt_lcd + LCD_ROW) % NUM_TYPE(g_cstr_samples);
+}
+
+int
+show_lcd(void)
+{
+    int i;
+    PGM_P p;
+    for (i = 0; i < LCD_ROW; i ++) {
+        lcd_moveto (0, i);
+        memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
+        lcd_printPGM (p);
+    }
+}
 
 ////////////////////////////////////////////////////////////
 
@@ -160,50 +177,73 @@ setup_lcd ()
     //pinMode(9, OUTPUT);digitalWrite (9, LOW);
     // set up the LCD's number of columns and rows:
     lcd.begin(LCD_COL, LCD_ROW);
+#if DEBUG
     // Print a message to the LCD.
     //lcd.print("hello, world!");
     lcd_print ("hello");
     lcd_printPGM (PSTR("HELLO"));
     test_show_uchar();
-    delay (2000);
+#endif
 }
 
-static unsigned long pre_tm_lcd = 0;
-static int cnt_lcd = 0;
-int
-test_lcd(void)
+void
+clear_lcd ()
 {
-    int i;
-    unsigned long now = millis();
-    PGM_P p;
-    if (pre_tm_lcd + 1000 < now) {
-        pre_tm_lcd = now;
-        cnt_lcd = (cnt_lcd + LCD_ROW) % NUM_TYPE(g_cstr_samples);
-        for (i = 0; i < LCD_ROW; i ++) {
-            lcd_moveto (0, i);
-            memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
-            lcd_printPGM (p);
-        }
-    }
-    delay (500);
-    return 1;
+    lcd.clear();
+}
+
+void
+lcd_update (void)
+{
+    clear_lcd ();
+    show_lcd();
+    update_idx ();
 }
 
 #else
 // use u8g
+#include <U8glib.h>
 
-U8GLIB *pu8g = NULL;
+#define OLED_SPI1_CS   10   //   ---   x Not exist
+#define OLED_SPI1_DC    8   //   D/C   pin# 6 (data or command)
+#define OLED_SPI1_RST   7   //   RST   pin# 5 U8G_PIN_NONE
+#define OLED_SPI1_MOSI 11   //   SDA   pin# 4
+#define OLED_SPI1_CLK  13   //   SCL   pin# 3
 
+U8GLIB_SSD1306_128X64 u8g(OLED_SPI1_CLK, OLED_SPI1_MOSI, OLED_SPI1_CS, OLED_SPI1_DC, OLED_SPI1_RST);
+U8GLIB *pu8g = &u8g;
+
+void u8g_prepare(U8GLIB * pu8g) {
+  pu8g->setFont(u8g_font_6x10);
+    //pu8g->setFont(bleeding_cowboys);
+  pu8g->setFontRefHeightExtendedText();
+  pu8g->setDefaultForegroundColor();
+  pu8g->setFontPosTop();
+}
+
+void
+clear_lcd ()
+{
+}
 
 void
 setup_lcd ()
 {
+    u8g_prepare(pu8g);
+    uxg_SetUtf8Fonts (g_fontinfo, NUM_ARRAY(g_fontinfo));
 }
 
-int
-test_lcd(void)
+void
+lcd_update (void)
 {
+    clear_lcd ();
+    u8g.firstPage();
+    do {
+        show_lcd();
+    } while( u8g.nextPage() );
+    update_idx ();
 }
+
 #endif // USE_HD44780
 
 /////////////////////////////////////////////////////////////////////////////
@@ -212,6 +252,9 @@ setup(void)
 {
 #if DEBUG && defined(ARDUINO)
     Serial.begin(9600);
+    delay (1000); // delay to avoid endless loop in tx, and the user can flash a new bin
+    // the user can also: 1) shutdown power, 2) press and hold reset key, 3) download bin(release key)
+
     // Wait for USB Serial.
     while (!Serial) {}
 
@@ -223,14 +266,18 @@ setup(void)
 #endif
     setup_lcd ();
     //lcd_init();
-
 }
 
+static unsigned long pre_tm_lcd = 0;
 void
 loop(void)
 {
-    //lcd_update();
-    test_lcd ();
+    unsigned long now = millis();
+    if (pre_tm_lcd + 1000 < now) {
+        pre_tm_lcd = now;
+
+        lcd_update();
+    }
 }
 
 #if ! defined(ARDUINO)
