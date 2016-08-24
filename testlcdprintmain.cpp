@@ -162,7 +162,7 @@ show_lcd(void)
 #if 1
     for (i = 0; i * lcd_glyph_height() < LCD_ROW; i ++) {
         //lcd_moveto (0, i * lcd_glyph_height());
-        lcd_moveto (0, i * 16);
+        lcd_moveto (0, (i + 1) * 12);
         memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
         lcd_printPGM (p);
     }
