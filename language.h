@@ -13,6 +13,5 @@
 //#include INCLUDE_LANGUAGE
 #include LANGUAGE_INCL(LCD_LANGUAGE)
 
-
 #endif // LANGUAGE_H
 

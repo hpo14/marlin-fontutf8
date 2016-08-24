@@ -3,7 +3,7 @@
 
 // the definitions for the language engine
 
-#define USE_HD44780 1
+#define USE_HD44780 0
 
 #define LANGUAGE_DATA_INCL_(M) STRINGIFY_(language_data_##M.h)
 #define LANGUAGE_DATA_INCL(M) LANGUAGE_DATA_INCL_(M)

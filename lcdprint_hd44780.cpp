@@ -27,6 +27,12 @@ extern LiquidCrystal lcd;
 #define _lcd_write(a) printf ("Write LCD: %c (%d)\n", (a), (int)(a));
 #endif
 
+int
+lcd_glyph_height(void)
+{
+    return 1;
+}
+
 ////////////////////////////////////////////////////////////
 typedef struct _hd44780_charmap_t {
     wchar_t uchar; // the unicode char

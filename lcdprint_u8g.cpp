@@ -14,13 +14,21 @@
 
 ////////////////////////////////////////////////////////////
 #if ! USE_HD44780
-
 #include <U8glib.h>
+
 extern U8GLIB *pu8g;
+
+int
+lcd_glyph_height(void)
+{
+    return u8g_GetFontBBXHeight(pu8g->getU8g());
+    //return u8g_GetFontBBXOffY(pu8g->getU8g());
+}
 
 void
 lcd_moveto (int col, int row)
 {
+    //TRACE ("u8g moveto (%d, %d)", col, row);
     pu8g->setPrintPos (col, row);
 }
 
@@ -33,7 +41,9 @@ lcd_printstr (const char * utf8_str, pixel_len_t max_length)
 
     x = pu8g->getPrintCol();
     y = pu8g->getPrintRow();
+    TRACE ("uxg_DrawUtf8Str(x=%d,y=%d,maxlen=%d", x, y, max_length);
     ret = uxg_DrawUtf8Str (pu8g->getU8g(), x, y, utf8_str, max_length);
+    TRACE ("u8g->setPrintPos(x=%d + ret=%d,y=%d", x, ret, y);
     pu8g->setPrintPos (x + ret, y);
 
     return ret;
@@ -48,7 +58,9 @@ lcd_printstr_P (const char * utf8_str_P, pixel_len_t max_length)
 
     x = pu8g->getPrintCol();
     y = pu8g->getPrintRow();
+    TRACE ("uxg_DrawUtf8StrP(x=%d,y=%d,maxlen=%d", x, y, max_length);
     ret = uxg_DrawUtf8StrP (pu8g->getU8g(), x, y, utf8_str_P, max_length);
+    TRACE ("u8g->setPrintPos(x=%d + ret=%d,y=%d", x, ret, y);
     pu8g->setPrintPos (x + ret, y);
 
     return ret;

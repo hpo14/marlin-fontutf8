@@ -80,6 +80,8 @@
 #define PIN_ROTARY_A   A1
 #define PIN_ROTARY_B   A2
 
+
+#if USE_HD44780
 #define LCD_COL 16
 #define LCD_ROW  2
 
@@ -88,6 +90,11 @@
 #undef LCD_ROW
 #define LCD_COL 20
 #define LCD_ROW  4
+#endif
+
+#else
+#define LCD_COL 128
+#define LCD_ROW  64
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -132,11 +139,11 @@ const char c27[] PROGMEM = _UxGT("千万円");
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
     //PSTR(MSG_SAMPLE2_FR),
-    c27,
     c01,c02,c03,c04,c05,c06,
-#if ! USE_HD44780
+#if 0 // ! USE_HD44780
     c11,c12,c13,c14,c15,c16,
     c21,c22,c23,c24,c25,c26,
+    c27,
 #endif
 };
 
@@ -144,7 +151,7 @@ static int cnt_lcd = 0;
 void
 update_idx ()
 {
-    cnt_lcd = (cnt_lcd + LCD_ROW) % NUM_TYPE(g_cstr_samples);
+    cnt_lcd = (cnt_lcd + 1) % NUM_TYPE(g_cstr_samples);
 }
 
 int
@@ -152,11 +159,20 @@ show_lcd(void)
 {
     int i;
     PGM_P p;
-    for (i = 0; i < LCD_ROW; i ++) {
-        lcd_moveto (0, i);
+#if 1
+    for (i = 0; i * lcd_glyph_height() < LCD_ROW; i ++) {
+        //lcd_moveto (0, i * lcd_glyph_height());
+        lcd_moveto (0, i * 16);
         memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
         lcd_printPGM (p);
     }
+#else
+    i=0;
+    lcd_moveto (10, LCD_ROW / 2);
+    TRACE ("show u8g string idx=%d", cnt_lcd);
+    memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
+    lcd_printPGM (p);
+#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -203,6 +219,10 @@ lcd_update (void)
 #else
 // use u8g
 #include <U8glib.h>
+#include "language.h"
+
+#include LANGUAGE_DATA_INCL(LCD_LANGUAGE)
+
 
 #define OLED_SPI1_CS   10   //   ---   x Not exist
 #define OLED_SPI1_DC    8   //   D/C   pin# 6 (data or command)
@@ -210,25 +230,34 @@ lcd_update (void)
 #define OLED_SPI1_MOSI 11   //   SDA   pin# 4
 #define OLED_SPI1_CLK  13   //   SCL   pin# 3
 
-U8GLIB_SSD1306_128X64 u8g(OLED_SPI1_CLK, OLED_SPI1_MOSI, OLED_SPI1_CS, OLED_SPI1_DC, OLED_SPI1_RST);
+//U8GLIB_SSD1306_128X64 u8g(OLED_SPI1_CLK, OLED_SPI1_MOSI, OLED_SPI1_CS, OLED_SPI1_DC, OLED_SPI1_RST);
+//U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_DEV_0|U8G_I2C_OPT_NO_ACK|U8G_I2C_OPT_FAST);
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
 U8GLIB *pu8g = &u8g;
 
-void u8g_prepare(U8GLIB * pu8g) {
-  pu8g->setFont(u8g_font_6x10);
+void
+u8g_prepare(U8GLIB * pu8g)
+{
+    TRACE ("u8g prepare");
+    pu8g->setFont(u8g_font_6x10);
     //pu8g->setFont(bleeding_cowboys);
-  pu8g->setFontRefHeightExtendedText();
-  pu8g->setDefaultForegroundColor();
-  pu8g->setFontPosTop();
+    pu8g->setFontRefHeightExtendedText();
+    pu8g->setDefaultForegroundColor();
+    pu8g->setFontPosTop();
 }
 
 void
 clear_lcd ()
 {
+    TRACE ("u8g clear_lcd");
 }
 
 void
 setup_lcd ()
 {
+    TRACE ("u8g setup_lcd");
+
+    pu8g = &u8g;
     u8g_prepare(pu8g);
     uxg_SetUtf8Fonts (g_fontinfo, NUM_ARRAY(g_fontinfo));
 }
@@ -236,10 +265,20 @@ setup_lcd ()
 void
 lcd_update (void)
 {
+    u8g_t * pu8g1;
+    pu8g1 = u8g.getU8g();
+    TRACE ("u8g lcd_update");
     clear_lcd ();
     u8g.firstPage();
     do {
+#if 1
         show_lcd();
+#else
+        //uxg_DrawUtf8StrP(pu8g1, 10, 32, c01, 10000);
+        lcd_moveto (10, 32);
+        lcd_printPGM (c01);
+
+#endif
     } while( u8g.nextPage() );
     update_idx ();
 }

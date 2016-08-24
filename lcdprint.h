@@ -22,6 +22,8 @@
 extern "C" {
 #endif
 
+int lcd_glyph_height(void);
+
 /**
  * @brief Draw a UTF-8 string
  *

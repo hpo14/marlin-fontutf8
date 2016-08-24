@@ -30,6 +30,7 @@
 #define pgm_read_byte pgm_read_byte_near
 #define strlen_P strlen
 #define memcpy_P memcpy
+#define vsnprintf_P vsnprintf
 #define PROGMEM
 #else
 #include <avr/pgmspace.h>
@@ -97,8 +98,11 @@ uint8_t * get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar
 
 #if DEBUG
 #if defined(ARDUINO)
-//#define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d " fmt " {ln:%d, fn:" __FILE__ "}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
+#if defined(__AVR__)
 #define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d %d " fmt " {ln:%d;}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
+#else
+#define TRACE(fmt, ...) {static const PROGMEM char CONSTSTR[] = "%d " fmt " {ln:%d, fn:" __FILE__ "}\n"; serial_printf_P (CONSTSTR, millis(), ##__VA_ARGS__, __LINE__);  }
+#endif
 #define assert(a) if (!(a)) {TRACE("Assert: " # a ); }
 
 #ifdef __cplusplus

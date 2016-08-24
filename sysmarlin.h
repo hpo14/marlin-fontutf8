@@ -14,8 +14,8 @@
 
 
 //#define LCD_LANGUAGE en
-//#define LCD_LANGUAGE cn
-#define LCD_LANGUAGE jp
+#define LCD_LANGUAGE cn
+//#define LCD_LANGUAGE jp
 //#define LCD_LANGUAGE ru
 
 
