@@ -384,7 +384,7 @@ uxg_GetUtf8StrPixelWidth(u8g_t *pu8g, char *utf8_msg)
  * Get the screen pixel length of a ROM UTF-8 string
  */
 int
-uxg_GetUtf8StrPixelWidthP(u8g_t *pu8g, char *utf8_msg)
+uxg_GetUtf8StrPixelWidthP(u8g_t *pu8g, const char *utf8_msg)
 {
     struct _uxg_drawu8_data_t data;
     font_group_t * group = &g_fontgroup_root;

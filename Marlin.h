@@ -1,7 +1,17 @@
 #ifndef _SYS_MARLIN_H
 #define _SYS_MARLIN_H
 
-#include <Arduino.h>
+
+//#define U8GLIB_SSD1306 1
+#define REPRAP_DISCOUNT_SMART_CONTROLLER 1
+//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER 1
+
+
+//#define LCD_LANGUAGE en
+//#define LCD_LANGUAGE cn
+#define LCD_LANGUAGE jp
+//#define LCD_LANGUAGE ru
+
 
 // the definitions from Marlin
 #define JAPANESE 1
@@ -12,16 +22,6 @@
 //#define DISPLAY_CHARSET_HD44780 WESTERN
 //#define DISPLAY_CHARSET_HD44780 CYRILLIC
 
-
-//#define LCD_LANGUAGE en
-//#define LCD_LANGUAGE cn
-#define LCD_LANGUAGE jp
-//#define LCD_LANGUAGE ru
-
-
-#define U8GLIB_SSD1306
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 
 
@@ -41,7 +41,6 @@
 #define SWITCH_ENABLED_      1
 #define ENABLED(b) _CAT(SWITCH_ENABLED_, b)
 #define DISABLED(b) (!_CAT(SWITCH_ENABLED_, b))
-
 
 // Generic support for SSD1306 / SH1106 OLED based LCDs.
 #if ENABLED(U8GLIB_SSD1306) || ENABLED(U8GLIB_SH1106)
@@ -311,6 +310,11 @@
   #endif // NEWPANEL
 
 #endif // ULTRA_LCD
+
+
+#if defined(ARDUINO)
+#include <Arduino.h>
+#endif
 
 #endif // _SYS_MARLIN_H
 

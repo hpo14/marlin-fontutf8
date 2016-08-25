@@ -13,10 +13,15 @@
 #include "lcdprint.h"
 
 ////////////////////////////////////////////////////////////
-#if ! USE_HD44780
-#include <U8glib.h>
+#if ENABLED(DOGLCD)
 
+#if defined(ARDUINO)
+#include <U8glib.h>
 extern U8GLIB *pu8g;
+#define _lcd_write(a) pu8g->print(a)
+#else
+#define _lcd_write(a) printf ("Write LCD: %c (%d)\n", (a), (int)(a));
+#endif
 
 int
 lcd_glyph_height(void)
@@ -30,6 +35,28 @@ lcd_moveto (int col, int row)
 {
     //TRACE ("u8g moveto (%d, %d)", col, row);
     pu8g->setPrintPos (col, row);
+}
+
+int
+lcd_print_uchar (wchar_t c, pixel_len_t max_length)
+{
+    if (c < 128) {
+        TRACE ("draw char: regular %d", (int)c);
+        _lcd_write  ((uint8_t)c);
+        return u8g_GetFontBBXWidth(pu8g->getU8g());
+    }
+    unsigned int ret;
+    unsigned int x;
+    unsigned int y;
+
+    x = pu8g->getPrintCol();
+    y = pu8g->getPrintRow();
+    TRACE ("uxg_DrawWchar(x=%d,y=%d,maxlen=%d", x, y, max_length);
+    ret = uxg_DrawWchar (pu8g->getU8g(), x, y, c, max_length);
+    TRACE ("u8g->setPrintPos(x=%d + ret=%d,y=%d", x, ret, y);
+    pu8g->setPrintPos (x + ret, y);
+
+    return ret;
 }
 
 int

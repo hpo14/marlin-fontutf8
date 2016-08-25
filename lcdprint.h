@@ -9,10 +9,12 @@
 #ifndef _LCDPRINT_H
 #define _LCDPRINT_H
 
-#include "syslang.h"
+#include "Marlin.h"
+//#include "syslang.h"
+
 #include "fontutils.h"
 
-#if USE_HD44780
+#if DISABLED(DOGLCD)
 #define _UxGT(a) a
 #else
 #include "u8g_fontutf8.h"
@@ -23,6 +25,8 @@ extern "C" {
 #endif
 
 int lcd_glyph_height(void);
+
+int lcd_print_uchar (wchar_t c, pixel_len_t max_length);
 
 /**
  * @brief Draw a UTF-8 string
@@ -48,15 +52,24 @@ int lcd_printstr (const char * utf8_str, pixel_len_t max_length);
  */
 int lcd_printstr_P (const char * utf8_str_P, pixel_len_t max_length);
 
-// char lcd_print(char c);
-// char lcd_print(const char* str);
-// char lcd_printPGM(const char* str);
-#define lcd_print(str)    lcd_printstr  (str, PIXEL_LEN_NOLIMIT)
-#define lcd_printPGM(str) lcd_printstr_P(str, PIXEL_LEN_NOLIMIT)
-
 void lcd_moveto (int col, int row);
 
 #ifdef __cplusplus
+}
+#endif
+
+// char lcd_print(char c);
+// char lcd_print(const char* str);
+// char lcd_printPGM(const char* str);
+#define lcd_printPGM(str) lcd_printstr_P(str, PIXEL_LEN_NOLIMIT)
+
+inline int lcd_print(const char* str) {
+    return lcd_printstr  (str, PIXEL_LEN_NOLIMIT);
+}
+
+#ifdef __cplusplus
+inline int lcd_print(wchar_t c) {
+    return lcd_print_uchar (c, PIXEL_LEN_NOLIMIT);
 }
 #endif
 

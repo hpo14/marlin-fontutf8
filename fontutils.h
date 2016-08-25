@@ -73,12 +73,6 @@ uint8_t read_byte_rom(uint8_t * str);
 #endif
 
 
-//#define pixel_len_t u8g_uint_t
-#define pixel_len_t uint16_t
-//#define pixel_len_t uint8_t
-#define PIXEL_LEN_NOLIMIT (pixel_len_t)(-1)
-
-
 #define UNUSED_VARIABLE(a) ((void)(a))
 #define NUM_TYPE(a) (sizeof(a)/sizeof((a)[0]))
 #define MIN(a,b) (((a)>(b))?(b):(a))
@@ -86,6 +80,13 @@ uint8_t read_byte_rom(uint8_t * str);
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+//#define pixel_len_t u8g_uint_t
+#define pixel_len_t uint16_t
+//#define pixel_len_t uint8_t
+//typedef uint16_t pixel_len_t;
+//#define PIXEL_LEN_NOLIMIT ((pixel_len_t)(-1))
+#define PIXEL_LEN_NOLIMIT 0xFFFF
 
 typedef int (* pf_bsearch_cb_comp_t)(void *userdata, size_t idx, void * data_pin); /*"data_list[idx] - *data_pin"*/
 int pf_bsearch_r (void *userdata, size_t num_data, pf_bsearch_cb_comp_t cb_comp, void *data_pinpoint, size_t *ret_idx);
@@ -95,6 +96,11 @@ int pf_bsearch_r (void *userdata, size_t num_data, pf_bsearch_cb_comp_t cb_comp,
 //uint8_t * get_utf8_value_cb (uint8_t *pstart, uint8_t (*cb_read_byte)(uint8_t * str), wchar_t *pval);
 uint8_t * get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval);
 
+int utf8_strlen (const char *pstart);
+int utf8_strlen_p (const char *pstart);
+
+char * utf8_strncpy (char * destination, const char * source, size_t num);
+char * utf8_strncpy_p (char * destination, const char * source, size_t num);
 
 #if DEBUG
 #if defined(ARDUINO)

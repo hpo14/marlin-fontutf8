@@ -7,14 +7,15 @@
  * @copyright GPL/BSD
  */
 #ifndef _UXG_FONTUTF8_H
-#define _UXG_FONTUTF8_H
+#define _UXG_FONTUTF8_H 1
 
-#include "u8g.h"
+#include <u8g.h>
 #include "fontutils.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 // the macro to indicate a UTF-8 string
 // You should to save the C/C++ source in UTF-8 encoding!
@@ -38,7 +39,7 @@ extern unsigned int uxg_DrawUtf8Str (u8g_t *pu8g, unsigned int x, unsigned int y
 extern unsigned int uxg_DrawUtf8StrP (u8g_t *pu8g, unsigned int x, unsigned int y, const char *utf8_msg, pixel_len_t max_length);
 
 extern int uxg_GetUtf8StrPixelWidth(u8g_t *pu8g, char *utf8_msg);
-extern int uxg_GetUtf8StrPixelWidthP(u8g_t *pu8g, char *utf8_msg);
+extern int uxg_GetUtf8StrPixelWidthP(u8g_t *pu8g, const char *utf8_msg);
 
 #define uxg_GetFont(puxg) ((puxg)->font)
 

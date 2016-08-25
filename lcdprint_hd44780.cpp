@@ -17,7 +17,7 @@
 #include "fontutils.h"
 #include "lcdprint.h"
 
-#if USE_HD44780
+#if DISABLED(DOGLCD)
 
 #if defined(ARDUINO)
 #include <LiquidCrystal.h>
@@ -711,7 +711,7 @@ pf_bsearch_cb_comp_hd4map_pgm (void *userdata, size_t idx, void * data_pin)
 // return < 0 on error
 // return the advanced cols
 int
-lcd_print_uchar (wchar_t c)
+lcd_print_uchar (wchar_t c, pixel_len_t max_length)
 {
     // find the HD44780 internal ROM first
     size_t idx = 0;
@@ -719,6 +719,10 @@ lcd_print_uchar (wchar_t c)
     hd44780_charmap_t localval;
     pinval.uchar = c;
     pinval.idx = -1;
+
+    if (max_length < 1) {
+        return 0;
+    }
 
     // TODO: fix the '\\' that dont exist in the HD44870
     if (c < 128) {
@@ -732,15 +736,19 @@ lcd_print_uchar (wchar_t c)
         assert ((localval.uchar == c) && (localval.uchar == pinval.uchar));
         TRACE ("draw char: %d at ROM %d(+%d)", (int)c, (int)localval.idx, (int)localval.idx2);
         _lcd_write  (localval.idx);
+        if (max_length < 2) {
+            return 1;
+        }
         if (localval.idx2 > 0) {
             _lcd_write  (localval.idx2);
+            return 2;
         }
         return 1;
     }
     // print '?' instead
     TRACE ("draw char: Not found %d (0x%X", (int)c, (int)c);
     _lcd_write  ((uint8_t)'?');
-    return 0;
+    return 1;
 }
 
 /**
@@ -776,7 +784,7 @@ lcd_printstr_cb (const char * utf8_str, uint16_t len, uint8_t (*cb_read_byte)(ui
             TRACE("No more char, break ...");
             break;
         }
-        ret += lcd_print_uchar (ch);
+        ret += lcd_print_uchar (ch, PIXEL_LEN_NOLIMIT);
     }
     return ret;
 }

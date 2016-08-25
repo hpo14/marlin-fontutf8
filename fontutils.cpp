@@ -142,142 +142,6 @@ pf_bsearch_r (void *userdata, size_t num_data, pf_bsearch_cb_comp_t cb_comp, voi
     return -1;
 }
 
-#if 0
-static wchar_t
-get_val_utf82uni (uint8_t *pstart)
-{
-    size_t cntleft;
-    wchar_t retval = 0;
-
-    if (0 == (0x80 & *pstart)) {
-        return *pstart;
-    }
-
-    if (((*pstart & 0xE0) ^ 0xC0) == 0) {
-        cntleft = 1;
-        retval = *pstart & ~0xE0;
-    } else if (((*pstart & 0xF0) ^ 0xE0) == 0) {
-        cntleft = 2;
-        retval = *pstart & ~0xF0;
-    } else if (((*pstart & 0xF8) ^ 0xF0) == 0) {
-        cntleft = 3;
-        retval = *pstart & ~0xF8;
-    } else if (((*pstart & 0xFC) ^ 0xF8) == 0) {
-        cntleft = 4;
-        retval = *pstart & ~0xFC;
-    } else if (((*pstart & 0xFE) ^ 0xFC) == 0) {
-        cntleft = 5;
-        retval = *pstart & ~0xFE;
-    } else {
-        /* encoding error */
-        cntleft = 0;
-        retval = 0;
-    }
-    pstart ++;
-    for (; cntleft > 0; cntleft --) {
-        retval <<= 6;
-        retval |= *pstart & 0x3F;
-        pstart ++;
-    }
-    return retval;
-}
-
-/**
- * @brief 转换 UTF-8 编码的一个字符为本地的 Unicode 字符(wchar_t)
- *
- * @param pstart : 存储 UTF-8 字符的指针
- * @param pval : 需要返回的 Unicode 字符存放地址指针
- *
- * @return 成功返回下个 UTF-8 字符的位置
- *
- * 转换 UTF-8 编码的一个字符为本地的 Unicode 字符(wchar_t)
- */
-uint8_t *
-get_utf8_value (uint8_t *pstart, wchar_t *pval)
-{
-    uint32_t val = 0;
-    uint8_t *p = pstart;
-    /*size_t maxlen = strlen (pstart);*/
-
-    assert (NULL != pstart);
-
-    if (0 == (0x80 & *p)) {
-        val = (size_t)*p;
-        p ++;
-    } else if (0xC0 == (0xE0 & *p)) {
-        val = *p & 0x1F;
-        val <<= 6;
-        p ++;
-        val |= (*p & 0x3F);
-        p ++;
-        assert ((wchar_t)val == get_val_utf82uni (pstart));
-    } else if (0xE0 == (0xF0 & *p)) {
-        val = *p & 0x0F;
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        p ++;
-        assert ((wchar_t)val == get_val_utf82uni (pstart));
-    } else if (0xF0 == (0xF8 & *p)) {
-        val = *p & 0x07;
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        p ++;
-        assert ((wchar_t)val == get_val_utf82uni (pstart));
-    } else if (0xF8 == (0xFC & *p)) {
-        val = *p & 0x03;
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        p ++;
-        assert ((wchar_t)val == get_val_utf82uni (pstart));
-    } else if (0xFC == (0xFE & *p)) {
-        val = *p & 0x01;
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        val <<= 6; p ++;
-        val |= (*p & 0x3F);
-        p ++;
-        assert ((wchar_t)val == get_val_utf82uni (pstart));
-    } else if (0x80 == (0xC0 & *p)) {
-        /* error? */
-        for (; 0x80 == (0xC0 & *p); p ++);
-    } else {
-        /* error */
-        for (; ((0xFE & *p) > 0xFC); p ++);
-    }
-    /*if (val == 0) {
-        p = NULL;*/
-/*
-    } else if (pstart + maxlen < p) {
-        p = pstart;
-        if (pval) *pval = 0;
-    }
-*/
-
-    if (pval) *pval = val;
-
-    return p;
-}
-
-#else // 0
-
 /**
  * @brief 转换 UTF-8 编码的一个字符为本地的 Unicode 字符(wchar_t)
  *
@@ -295,7 +159,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
     uint32_t val = 0;
     uint8_t valcur = 0;
     uint8_t *p = pstart;
-    /*size_t maxlen = strlen (pstart);*/
 
     assert (NULL != pstart);
     assert (NULL != cb_read_byte);
@@ -311,7 +174,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
         valcur = cb_read_byte (p);
         val |= (valcur & 0x3F);
         p ++;
-        //assert ((wchar_t)val == get_val_utf82uni (pstart));
     } else if (0xE0 == (0xF0 & valcur)) {
         val = valcur & 0x0F;
         val <<= 6; p ++;
@@ -321,7 +183,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
         valcur = cb_read_byte (p);
         val |= (valcur & 0x3F);
         p ++;
-        //assert ((wchar_t)val == get_val_utf82uni (pstart));
     } else if (0xF0 == (0xF8 & valcur)) {
         val = valcur & 0x07;
         val <<= 6; p ++;
@@ -334,7 +195,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
         valcur = cb_read_byte (p);
         val |= (valcur & 0x3F);
         p ++;
-        //assert ((wchar_t)val == get_val_utf82uni (pstart));
     } else if (0xF8 == (0xFC & valcur)) {
         val = valcur & 0x03;
         val <<= 6; p ++;
@@ -350,7 +210,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
         valcur = cb_read_byte (p);
         val |= (valcur & 0x3F);
         p ++;
-        //assert ((wchar_t)val == get_val_utf82uni (pstart));
     } else if (0xFC == (0xFE & valcur)) {
         val = valcur & 0x01;
         val <<= 6; p ++;
@@ -369,7 +228,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
         valcur = cb_read_byte (p);
         val |= (valcur & 0x3F);
         p ++;
-        //assert ((wchar_t)val == get_val_utf82uni (pstart));
     } else if (0x80 == (0xC0 & valcur)) {
         /* error? */
         for (; 0x80 == (0xC0 & valcur); p ++);
@@ -391,4 +249,98 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
     return p;
 }
 
-#endif // 0
+
+// uint8_t * get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval);
+int
+utf8_strlen_cb (const char *pstart, read_byte_cb_t cb_read_byte)
+{
+    wchar_t ch;
+    uint8_t *pnext;
+    int cnt = 0;
+
+    for (pnext = (uint8_t *)pstart; pnext = get_utf8_value_cb (pnext, cb_read_byte, &ch); ) {
+        if (pnext == NULL) {
+            break;
+        }
+        cnt ++;
+    }
+    return cnt;
+}
+
+int
+utf8_strlen (const char *pstart)
+{
+    return utf8_strlen_cb (pstart, read_byte_ram);
+}
+
+int
+utf8_strlen_p (const char *pstart)
+{
+    return utf8_strlen_cb (pstart, read_byte_rom);
+}
+
+char *
+utf8_strncpy_cb ( char * destination, const char * source, size_t num, int len_src, read_byte_cb_t cb_read_byte )
+{
+    uint8_t valcur = 0;
+    uint8_t *p = (uint8_t *)source;
+    uint8_t *d = (uint8_t *)destination;
+
+    assert (NULL != destination);
+    assert (NULL != source);
+    assert (NULL != cb_read_byte);
+
+    uint8_t *pend = p + len_src;
+    int len;
+    int cur = 0;
+
+    for (; p < pend; ) {
+        valcur = cb_read_byte (p);
+        len = 0;
+        if (0 == (0x80 & valcur)) {
+            len = 1;
+        } else if (0xC0 == (0xE0 & valcur)) {
+            len = 2;
+        } else if (0xE0 == (0xF0 & valcur)) {
+            len = 3;
+        } else if (0xF0 == (0xF8 & valcur)) {
+            len = 4;
+        } else if (0xF8 == (0xFC & valcur)) {
+            len = 5;
+        } else if (0xFC == (0xFE & valcur)) {
+            len = 6;
+        } else if (0x80 == (0xC0 & valcur)) {
+            /* error? */
+            for (; 0x80 == (0xC0 & valcur) && (p < pend); p ++);
+        } else {
+            /* error */
+            for (; ((0xFE & valcur) > 0xFC) && (p < pend); p ++);
+        }
+        if (cur + len < num) {
+            int i;
+            for (i = 0; i < len; i ++) {
+                valcur = cb_read_byte (p);
+                *d = valcur;
+                d ++;
+                p ++;
+            }
+        } else {
+            break;
+        }
+    }
+    *d = 0;
+    return destination;
+}
+
+char *
+utf8_strncpy (char * destination, const char * source, size_t num)
+{
+    return utf8_strncpy_cb (destination, source, num, strlen(source), read_byte_ram);
+}
+
+char *
+utf8_strncpy_p (char * destination, const char * source, size_t num)
+{
+    return utf8_strncpy_cb (destination, source, num, strlen_P(source), read_byte_rom);
+}
+
