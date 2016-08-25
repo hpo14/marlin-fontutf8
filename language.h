@@ -1,8 +1,7 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H 1
 
-#include "syslang.h"
-#include "sysmarlin.h"
+#include "Marlin.h"
 
 // LCD Menu Messages
 #define LANGUAGE_INCL_(M) STRINGIFY_(language_##M.h)

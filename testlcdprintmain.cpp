@@ -46,12 +46,8 @@
 
 #endif
 
-
-#include "syslang.h"
-#include "sysmarlin.h"
-
+#include "Marlin.h"
 #include "language.h"
-
 
 /////////////////////////////////////////////////////////////////////////////
 #ifndef TRACE
@@ -181,46 +177,7 @@ show_lcd(void)
 
 ////////////////////////////////////////////////////////////
 
-#if USE_HD44780
-#include <LiquidCrystal.h>
-
-//LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
-//    uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-//    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-LiquidCrystal lcd(PIN_LCD_RS, PIN_LCD_RW, PIN_LCD_EN,   PIN_LCD_D4, PIN_LCD_D5, PIN_LCD_D6, PIN_LCD_D7);
-
-extern void test_show_uchar();
-
-void
-setup_lcd ()
-{
-    //pinMode(9, OUTPUT);digitalWrite (9, LOW);
-    // set up the LCD's number of columns and rows:
-    lcd.begin(LCD_COL, LCD_ROW);
-#if DEBUG
-    // Print a message to the LCD.
-    //lcd.print("hello, world!");
-    lcd_print ("hello");
-    lcd_printPGM (PSTR("HELLO"));
-    test_show_uchar();
-#endif
-}
-
-void
-clear_lcd ()
-{
-    lcd.clear();
-}
-
-void
-lcd_update (void)
-{
-    clear_lcd ();
-    show_lcd();
-    update_idx ();
-}
-
-#else
+#if ENABLED(DOGLCD)
 // use u8g
 #include <U8glib.h>
 #include "language.h"
@@ -234,9 +191,9 @@ lcd_update (void)
 #define OLED_SPI1_MOSI 11   //   SDA   pin# 4
 #define OLED_SPI1_CLK  13   //   SCL   pin# 3
 
-//U8GLIB_SSD1306_128X64 u8g(OLED_SPI1_CLK, OLED_SPI1_MOSI, OLED_SPI1_CS, OLED_SPI1_DC, OLED_SPI1_RST);
+U8GLIB_SSD1306_128X64 u8g(OLED_SPI1_CLK, OLED_SPI1_MOSI, OLED_SPI1_CS, OLED_SPI1_DC, OLED_SPI1_RST);
 //U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_DEV_0|U8G_I2C_OPT_NO_ACK|U8G_I2C_OPT_FAST);
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
+//U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
 U8GLIB *pu8g = &u8g;
 
 void
@@ -287,7 +244,46 @@ lcd_update (void)
     update_idx ();
 }
 
-#endif // USE_HD44780
+#else
+#include <LiquidCrystal.h>
+
+//LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+//    uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+//    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+LiquidCrystal lcd(PIN_LCD_RS, PIN_LCD_RW, PIN_LCD_EN,   PIN_LCD_D4, PIN_LCD_D5, PIN_LCD_D6, PIN_LCD_D7);
+
+extern void test_show_uchar();
+
+void
+setup_lcd ()
+{
+    //pinMode(9, OUTPUT);digitalWrite (9, LOW);
+    // set up the LCD's number of columns and rows:
+    lcd.begin(LCD_COL, LCD_ROW);
+#if DEBUG
+    // Print a message to the LCD.
+    //lcd.print("hello, world!");
+    lcd_print ("hello");
+    lcd_printPGM (PSTR("HELLO"));
+    test_show_uchar();
+#endif
+}
+
+void
+clear_lcd ()
+{
+    lcd.clear();
+}
+
+void
+lcd_update (void)
+{
+    clear_lcd ();
+    show_lcd();
+    update_idx ();
+}
+
+#endif // DOGLCD
 
 /////////////////////////////////////////////////////////////////////////////
 void
