@@ -109,6 +109,28 @@ fontgroup_find (font_group_t * root, wchar_t val)
     return vcmp.fntdata;
 }
 
+static void
+fontgroup_drawwchar (font_group_t * group, font_t *fnt_default, wchar_t val, void * userdata, fontgroup_cb_draw_t cb_draw_ram)
+{
+    uint8_t buf[2] = {0, 0};
+    font_t * fntpqm = NULL;
+
+    //TRACE("got char=%d", (int)val);
+    buf[0] = (uint8_t)(val & 0x7F);
+    fntpqm = (font_t *)fontgroup_find (group, val);
+    if (NULL == fntpqm) {
+        //continue;
+        //buf[0] = '?';
+        fntpqm = fnt_default;
+        TRACE("Unknown char, use default font");
+    }
+    if (fnt_default != fntpqm) {
+        buf[0] |= 0x80; // use upper page to avoid 0x00 error in C. you may want to generate the font data
+    }
+    //TRACE("set font: %p; (default=%p)", fntpqm, UXG_DEFAULT_FONT);
+    cb_draw_ram (userdata, fntpqm, (char *) buf);
+}
+
 /**
  * @brief try to process a utf8 string
  *
@@ -130,8 +152,6 @@ fontgroup_drawstring (font_group_t * group, font_t *fnt_default, const char *utf
     uint8_t *pend = NULL;
     uint8_t *p;
     wchar_t val;
-    uint8_t buf[2] = {0, 0};
-    font_t * fntpqm = NULL;
 
     pend = (uint8_t *)utf8_msg + len_msg;
     for (p = (uint8_t *)utf8_msg; p < pend; ) {
@@ -141,25 +161,7 @@ fontgroup_drawstring (font_group_t * group, font_t *fnt_default, const char *utf
             TRACE("No more char, break ...");
             break;
         }
-        //TRACE("got char=%d", (int)val);
-        buf[0] = (uint8_t)(val & 0x7F);
-        fntpqm = (font_t *)fontgroup_find (group, val);
-        if (NULL == fntpqm) {
-            //continue;
-            //buf[0] = '?';
-            fntpqm = fnt_default;
-            TRACE("Unknown char, use default font");
-        }
-        if (fnt_default != fntpqm) {
-            buf[0] |= 0x80; // use upper page to avoid 0x00 error in C. you may want to generate the font data
-        }
-        //TRACE("set font: %p; (default=%p)", fntpqm, UXG_DEFAULT_FONT);
-
-        ret = cb_draw_ram (userdata, fntpqm, (char *) buf);
-        if (1 == ret) {
-            // force quit
-            break;
-        }
+        fontgroup_drawwchar (group, fnt_default, val, userdata, cb_draw_ram);
     }
 }
 
@@ -214,6 +216,42 @@ fontgroup_cb_draw_u8g (void *userdata, font_t *fnt_current, const char *msg)
 }
 
 /**
+ * @brief Draw a wchar_t at the specified position
+ *
+ * @param pu8g : U8G pointer
+ * @param x : position x axis
+ * @param y : position y axis
+ * @param ch : the wchar_t
+ * @param max_length : the pixel length of the string allowed
+ *
+ * @return the avanced pixel
+ *
+ * Draw a UTF-8 string at the specified position
+ */
+unsigned int
+uxg_DrawWchar (u8g_t *pu8g, unsigned int x, unsigned int y, wchar_t ch, pixel_len_t max_length)
+{
+    struct _uxg_drawu8_data_t data;
+    font_group_t * group = &g_fontgroup_root;
+    font_t *fnt_default = uxg_GetFont(pu8g);
+
+    if (! uxg_Utf8FontIsInited()) {
+        u8g_DrawStrP (pu8g, x, y, PSTR("Err: utf8 font not initialized."));
+        return 0;
+    }
+    data.pu8g = pu8g;
+    data.x = x;
+    data.y = y;
+    data.adv = 0;
+    data.max_length = max_length;
+    data.fnt_prev = NULL;
+    fontgroup_drawwchar (group, fnt_default, ch, (void *)&data, fontgroup_cb_draw_u8g);
+    u8g_SetFont (pu8g, fnt_default);
+
+    return data.adv;
+}
+
+/**
  * @brief Draw a UTF-8 string at the specified position
  *
  * @param pu8g : U8G pointer
@@ -234,7 +272,7 @@ uxg_DrawUtf8Str (u8g_t *pu8g, unsigned int x, unsigned int y, const char *utf8_m
     font_t *fnt_default = uxg_GetFont(pu8g);
 
     if (! uxg_Utf8FontIsInited()) {
-        u8g_DrawStr (pu8g, x, y, "Err: utf8 font not initialized.");
+        u8g_DrawStrP (pu8g, x, y, PSTR("Err: utf8 font not initialized."));
         return 0;
     }
     data.pu8g = pu8g;
@@ -271,7 +309,7 @@ uxg_DrawUtf8StrP (u8g_t *pu8g, unsigned int x, unsigned int y, const char *utf8_
 
     if (! uxg_Utf8FontIsInited()) {
         TRACE ("Error, utf8string not inited!");
-        u8g_DrawStr (pu8g, x, y, "Err: utf8 font not initialized.");
+        u8g_DrawStrP (pu8g, x, y, PSTR("Err: utf8 font not initialized."));
         return 0;
     }
     data.pu8g = pu8g;

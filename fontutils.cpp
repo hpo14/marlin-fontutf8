@@ -1,5 +1,5 @@
 /**
- * @file    fontutils.c
+ * @file    fontutils.cpp
  * @brief   help functions for font and char
  * @author  Yunhui Fu (yhfudev@gmail.com)
  * @version 1.0

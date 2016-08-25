@@ -23,8 +23,10 @@
 #include <LiquidCrystal.h>
 extern LiquidCrystal lcd;
 #define _lcd_write(a) lcd.write(a)
+#define _lcd_setcursor(col, row) lcd.setCursor((col), (row));
 #else
-#define _lcd_write(a) printf ("Write LCD: %c (%d)\n", (a), (int)(a));
+#define _lcd_write(a) TRACE ("Write LCD: %c (%d)", (a), (int)(a));
+#define _lcd_setcursor(col, row) TRACE ("Set cursor LCD: (%d,%d)", (col), (row));
 #endif
 
 int
@@ -247,6 +249,74 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     {IV('円'), 0xFC, 0},
     {IV('千'), 0xFA, 0},
     //{IV(''), 0xFE, 0},
+
+//､･ｦｧｨｩｪｫｬｭｮｯｰ
+    {IV('､'), 0xA4, 0}, //ヽ
+    {IV('･'), 0xA5, 0}, //・
+    {IV('ｦ'), 0xA6, 0}, //ヲ
+    {IV('ｧ'), 0xA7, 0}, //ァ
+    {IV('ｨ'), 0xA8, 0}, //ィ
+    {IV('ｩ'), 0xA9, 0}, //ゥ
+    {IV('ｪ'), 0xAA, 0}, //ェ
+    {IV('ｫ'), 0xAB, 0}, //ォ
+    {IV('ｬ'), 0xAC, 0}, //ャ
+    {IV('ｭ'), 0xAD, 0}, //ュ
+    {IV('ｮ'), 0xAE, 0}, //ョ
+    {IV('ｯ'), 0xAF, 0}, //ッ
+    {IV('ｰ'), 0xB0, 0}, //ー
+
+//ｱｲｳｴｵｶｷｸｹｺｻｼｽｾ
+    {IV('ｱ'), 0xB1, 0}, //ア
+    {IV('ｲ'), 0xB2, 0}, //イ
+    {IV('ｳ'), 0xB3, 0}, //ウ
+    {IV('ｴ'), 0xB4, 0}, //エ
+    {IV('ｵ'), 0xB5, 0}, //オ
+    {IV('ｶ'), 0xB6, 0}, //カ
+    {IV('ｷ'), 0xB7, 0}, //キ
+    {IV('ｸ'), 0xB8, 0}, //ク
+    {IV('ｹ'), 0xB9, 0}, //ケ
+    {IV('ｺ'), 0xBA, 0}, //コ
+    {IV('ｻ'), 0xBB, 0}, //サ
+    {IV('ｼ'), 0xBC, 0}, //シ
+    {IV('ｽ'), 0xBD, 0}, //ス
+    {IV('ｾ'), 0xBE, 0}, //セ
+
+//ｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌ
+    {IV('ｿ'), 0xBF, 0}, //ソ
+    {IV('ﾀ'), 0xC0, 0}, //タ
+    {IV('ﾁ'), 0xC1, 0}, //チ
+    {IV('ﾂ'), 0xC2, 0}, //ツ
+    {IV('ﾃ'), 0xC3, 0}, //テ
+    {IV('ﾄ'), 0xC4, 0}, //ト
+    {IV('ﾅ'), 0xC5, 0}, //ナ
+    {IV('ﾆ'), 0xC6, 0}, //ニ
+    {IV('ﾇ'), 0xC7, 0}, //ヌ
+    {IV('ﾈ'), 0xC8, 0}, //ネ
+    {IV('ﾉ'), 0xC9, 0}, //ノ
+    {IV('ﾊ'), 0xCA, 0}, //ハ
+    {IV('ﾋ'), 0xCB, 0}, //ヒ
+    {IV('ﾌ'), 0xCC, 0}, //フ
+
+//ﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ
+    {IV('ﾍ'), 0xCD, 0}, //ヘ
+    {IV('ﾎ'), 0xCE, 0}, //ホ
+    {IV('ﾏ'), 0xCF, 0}, //マ
+    {IV('ﾐ'), 0xD0, 0}, //ミ
+    {IV('ﾑ'), 0xD1, 0}, //ム
+    {IV('ﾒ'), 0xD2, 0}, //メ
+    {IV('ﾓ'), 0xD3, 0}, //モ
+    {IV('ﾔ'), 0xD4, 0}, //ヤ
+    {IV('ﾕ'), 0xD5, 0}, //ユ
+    {IV('ﾖ'), 0xD6, 0}, //ヨ
+    {IV('ﾗ'), 0xD7, 0}, //ラ
+    {IV('ﾘ'), 0xD8, 0}, //リ
+    {IV('ﾙ'), 0xD9, 0}, //ル
+    {IV('ﾚ'), 0xDA, 0}, //レ
+    {IV('ﾛ'), 0xDB, 0}, //ロ
+    {IV('ﾜ'), 0xDC, 0}, //ワ
+    {IV('ﾝ'), 0xDD, 0}, //ン
+    {IV('ﾞ'), 0xDE, 0}, // ゛
+    {IV('ﾟ'), 0xDF, 0}, // ゜
 
 #elif DISPLAY_CHARSET_HD44780 == WESTERN
 // 0x10 -- 0x1F (except 0x1C)
@@ -600,7 +670,7 @@ test_show_uchar()
 void
 lcd_moveto (int col, int row)
 {
-    lcd.setCursor(col, row);
+    _lcd_setcursor(col, row);
 }
 
 /* return v1 - v2 */

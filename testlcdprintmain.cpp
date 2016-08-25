@@ -113,6 +113,7 @@
 #define MSG_SAMPLE2_CNTW _UxGT("你做得很好！")
 #define MSG_SAMPLE2_FR   _UxGT("Vous avez fait un très bon travail!")
 
+const char c00[] PROGMEM = "mix eng and " WELCOME_MSG;
 const char c01[] PROGMEM = WELCOME_MSG;
 const char c02[] PROGMEM = MSG_SD_INSERTED;
 const char c03[] PROGMEM = MSG_SD_REMOVED;
@@ -127,19 +128,22 @@ const char c14[] PROGMEM = MSG_SAMPLE1_CNZH;
 const char c15[] PROGMEM = MSG_SAMPLE1_CNTW;
 const char c16[] PROGMEM = MSG_SAMPLE1_FR;
 
-const char c21[] PROGMEM = MSG_SAMPLE1_EN;
-const char c22[] PROGMEM = MSG_SAMPLE1_RU;
-const char c23[] PROGMEM = MSG_SAMPLE1_JP;
-const char c24[] PROGMEM = MSG_SAMPLE1_CNZH;
-const char c25[] PROGMEM = MSG_SAMPLE1_CNTW;
-const char c26[] PROGMEM = MSG_SAMPLE1_FR;
+const char c21[] PROGMEM = MSG_SAMPLE2_EN;
+const char c22[] PROGMEM = MSG_SAMPLE2_RU;
+const char c23[] PROGMEM = MSG_SAMPLE2_JP;
+const char c24[] PROGMEM = MSG_SAMPLE2_CNZH;
+const char c25[] PROGMEM = MSG_SAMPLE2_CNTW;
+const char c26[] PROGMEM = MSG_SAMPLE2_FR;
 
 const char c27[] PROGMEM = _UxGT("千万円");
 
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
     //PSTR(MSG_SAMPLE2_FR),
+    c00,
     c01,c02,c03,c04,c05,c06,
+    c11,
+    c21,
 #if 0 // ! USE_HD44780
     c11,c12,c13,c14,c15,c16,
     c21,c22,c23,c24,c25,c26,
@@ -161,8 +165,8 @@ show_lcd(void)
     PGM_P p;
 #if 1
     for (i = 0; i * lcd_glyph_height() < LCD_ROW; i ++) {
-        //lcd_moveto (0, i * lcd_glyph_height());
-        lcd_moveto (0, (i + 1) * 12);
+        lcd_moveto (0, i * lcd_glyph_height());
+        //lcd_moveto (0, (i + 1) * 12);
         memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
         lcd_printPGM (p);
     }
