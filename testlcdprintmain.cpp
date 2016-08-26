@@ -140,7 +140,7 @@ PGM_P const g_cstr_samples[] PROGMEM = {
     c01,c02,c03,c04,c05,c06,
     c11,
     c21,
-#if 0 // ! USE_HD44780
+#if ENABLED(DOGLCD)
     c11,c12,c13,c14,c15,c16,
     c21,c22,c23,c24,c25,c26,
 #endif
