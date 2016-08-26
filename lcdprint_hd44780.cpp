@@ -318,6 +318,8 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     {IV('ﾞ'), 0xDE, 0}, // ゛
     {IV('ﾟ'), 0xDF, 0}, // ゜
 
+    {IV('￥'), 0x5C, 0},
+
 #elif DISPLAY_CHARSET_HD44780 == WESTERN
 // 0x10 -- 0x1F (except 0x1C)
 // 0x80 -- 0xFF (except 0xA7,0xB0,0xB1,0xB3,0xB4,0xBF,0xD1,0xF8,0xFA,0xFC-0xFF)
@@ -483,6 +485,8 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     //{IV(''), 0xFF, 0}, // error
 
 #elif DISPLAY_CHARSET_HD44780 == CYRILLIC
+
+    {IV('¢'), 0x5C, 0},
 
     //{IV(''), 0x80, 0},
     //{IV(''), 0x81, 0},
@@ -670,6 +674,7 @@ test_show_uchar()
 void
 lcd_moveto (int col, int row)
 {
+    TRACE ("Move to: (%d,%d)", col, row);
     _lcd_setcursor(col, row);
 }
 
@@ -726,7 +731,7 @@ lcd_print_uchar (wchar_t c, pixel_len_t max_length)
 
     // TODO: fix the '\\' that dont exist in the HD44870
     if (c < 128) {
-        TRACE ("draw char: regular %d", (int)c);
+        //TRACE ("draw char: regular %d", (int)c);
         _lcd_write  ((uint8_t)c);
         return 1;
     }
