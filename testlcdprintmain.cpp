@@ -159,12 +159,16 @@ show_lcd(void)
 {
     int i;
     PGM_P p;
+    char buf[50];
 #if 1
     for (i = 0; i * lcd_glyph_height() < LCD_ROW; i ++) {
         lcd_moveto (0, i * lcd_glyph_height());
         //lcd_moveto (0, (i + 1) * 12);
         memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
-        lcd_printPGM (p);
+        //TRACE ("call utf8_strlen_p ...");
+        sprintf (buf, "%d ", utf8_strlen_p(p)); lcd_print (buf);
+        //lcd_printPGM (p);
+        utf8_strncpy_p (buf, p, sizeof(buf)); lcd_print (buf);
     }
 #else
     i=0;

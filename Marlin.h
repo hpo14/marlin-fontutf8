@@ -24,6 +24,9 @@
 
 
 
+#define SERIAL_ECHO(a) Serial.print(a)
+#define SERIAL_EOL Serial.println("")
+
 
 #define FORCE_INLINE __attribute__((always_inline)) inline
 #define UNUSED(x) (void) (x)

@@ -230,9 +230,11 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
         p ++;
     } else if (0x80 == (0xC0 & valcur)) {
         /* error? */
+        TRACE ("ERR 1");
         for (; 0x80 == (0xC0 & valcur); p ++);
     } else {
         /* error */
+        TRACE ("ERR 2");
         for (; ((0xFE & valcur) > 0xFC); p ++);
     }
     /*if (val == 0) {
@@ -249,8 +251,6 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
     return p;
 }
 
-
-// uint8_t * get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval);
 int
 utf8_strlen_cb (const char *pstart, read_byte_cb_t cb_read_byte)
 {
@@ -258,11 +258,16 @@ utf8_strlen_cb (const char *pstart, read_byte_cb_t cb_read_byte)
     uint8_t *pnext;
     int cnt = 0;
 
-    for (pnext = (uint8_t *)pstart; pnext = get_utf8_value_cb (pnext, cb_read_byte, &ch); ) {
+    for (pnext = (uint8_t *)pstart; ; ) {
+        pnext = get_utf8_value_cb (pnext, cb_read_byte, &ch);
         if (pnext == NULL) {
             break;
         }
+        if (ch == 0) {
+            break;
+        }
         cnt ++;
+        //TRACE ("cnt=%d, ch=0x%X", cnt, (int)ch);
     }
     return cnt;
 }
