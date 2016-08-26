@@ -143,8 +143,8 @@ PGM_P const g_cstr_samples[] PROGMEM = {
 #if 0 // ! USE_HD44780
     c11,c12,c13,c14,c15,c16,
     c21,c22,c23,c24,c25,c26,
-    c27,
 #endif
+    c27,
 };
 
 static int cnt_lcd = 0;
@@ -267,7 +267,7 @@ setup_lcd ()
 #if DEBUG
     // Print a message to the LCD.
     //lcd.print("hello, world!");
-    lcd_print ("hello");
+    lcd_print ("hello"); lcd_print_wchar ('-');
     lcd_printPGM (PSTR("HELLO"));
     test_show_uchar();
 #endif

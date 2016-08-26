@@ -10,6 +10,7 @@ LANGS="cn jp ru"
 for LANG in ${LANGS} ; do
     rm -rf ${DN_WORK}/
     mkdir -p ${DN_WORK}
+    cp testlcdprintmain.cpp ${DN_WORK}/
     cp language_${LANG}.h ${DN_WORK}/
     cd ${DN_WORK}/
     ../../buildroot/share/fonts/uxggenpages.sh
