@@ -138,7 +138,7 @@ const char c24[] PROGMEM = MSG_SAMPLE2_CNZH;
 const char c25[] PROGMEM = MSG_SAMPLE2_CNTW;
 const char c26[] PROGMEM = MSG_SAMPLE2_FR;
 
-const char c27[] PROGMEM = _UxGT("千万円");
+const char c27[] PROGMEM = _UxGT("日語千万円");
 
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
