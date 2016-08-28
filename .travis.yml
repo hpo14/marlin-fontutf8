@@ -10,8 +10,8 @@ before_install:
   - git fetch origin --tags
   #
   # Publish the buildroot script folder
-  - chmod +x ${TRAVIS_BUILD_DIR}/buildroot/bin/*
-  - ln -s ${TRAVIS_BUILD_DIR}/buildroot/bin/ ~/bin
+  #- chmod +x ${TRAVIS_BUILD_DIR}/buildroot/bin/*
+  #- ln -s ${TRAVIS_BUILD_DIR}/buildroot/bin/ ~/bin
   #
   # Start fb X server
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16"
