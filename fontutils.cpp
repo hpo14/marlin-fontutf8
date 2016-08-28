@@ -231,11 +231,11 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
     } else if (0x80 == (0xC0 & valcur)) {
         /* error? */
         TRACE ("ERR 1");
-        for (; 0x80 == (0xC0 & valcur); p ++);
+        for (; 0x80 == (0xC0 & valcur); ) { p ++; valcur = cb_read_byte (p); }
     } else {
         /* error */
         TRACE ("ERR 2");
-        for (; ((0xFE & valcur) > 0xFC); p ++);
+        for (; ((0xFE & valcur) > 0xFC); ) { p ++; valcur = cb_read_byte (p); }
     }
     /*if (val == 0) {
         p = NULL;*/
@@ -316,10 +316,10 @@ utf8_strncpy_cb ( char * destination, const char * source, size_t num, int len_s
             len = 6;
         } else if (0x80 == (0xC0 & valcur)) {
             /* error? */
-            for (; 0x80 == (0xC0 & valcur) && (p < pend); p ++);
+            for (; 0x80 == (0xC0 & valcur) && (p < pend); ) { p ++; valcur = cb_read_byte (p); }
         } else {
             /* error */
-            for (; ((0xFE & valcur) > 0xFC) && (p < pend); p ++);
+            for (; ((0xFE & valcur) > 0xFC) && (p < pend); ) { p ++; valcur = cb_read_byte (p); }
         }
         if (cur + len < num) {
             int i;
