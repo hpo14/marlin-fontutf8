@@ -7,6 +7,13 @@
  * @copyright GPL/BSD
  */
 
+// ref:
+// localization by gettext or Qt
+// http://stackoverflow.com/questions/11789615/how-to-support-multiple-language-in-a-linux-c-c-program
+// http://fedoraproject.org/wiki/How_to_do_I18N_through_gettext
+// http://doc.qt.io/qt-5/internationalization.html
+
+
 #include "lcdprint.h"
 
 #if defined(ARDUINO)

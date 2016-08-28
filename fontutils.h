@@ -74,8 +74,12 @@ uint8_t read_byte_rom(uint8_t * str);
 
 
 #define UNUSED_VARIABLE(a) ((void)(a))
-#define NUM_TYPE(a) (sizeof(a)/sizeof((a)[0]))
 #define MIN(a,b) (((a)>(b))?(b):(a))
+
+#ifndef NUM_ARRAY
+#define NUM_ARRAY(a) (sizeof(a)/sizeof((a)[0]))
+#endif // NUM_ARRAY
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,8 +89,7 @@ extern "C" {
 #define pixel_len_t uint16_t
 //#define pixel_len_t uint8_t
 //typedef uint16_t pixel_len_t;
-//#define PIXEL_LEN_NOLIMIT ((pixel_len_t)(-1))
-#define PIXEL_LEN_NOLIMIT 0xFFFF
+#define PIXEL_LEN_NOLIMIT ((pixel_len_t)(-1))
 
 typedef int (* pf_bsearch_cb_comp_t)(void *userdata, size_t idx, void * data_pin); /*"data_list[idx] - *data_pin"*/
 int pf_bsearch_r (void *userdata, size_t num_data, pf_bsearch_cb_comp_t cb_comp, void *data_pinpoint, size_t *ret_idx);

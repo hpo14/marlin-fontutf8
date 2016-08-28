@@ -8,10 +8,8 @@
  */
 
 #include <string.h>
-
+#include <u8g.h>
 #include "fontutils.h"
-#include "u8g.h"
-
 #include "u8g_fontutf8.h"
 
 #define FALSE 0
@@ -84,7 +82,7 @@ typedef struct _font_group_t {
 } font_group_t;
 
 static int
-fontgroup_init (font_group_t * root, uxg_fontinfo_t * fntinfo, int number)
+fontgroup_init (font_group_t * root, const uxg_fontinfo_t * fntinfo, int number)
 {
     root->m_fntifo = fntinfo;
     root->m_fntinfo_num = number;
@@ -195,7 +193,7 @@ struct _uxg_drawu8_data_t {
     void * fnt_prev;
 };
 
-static void
+static int
 fontgroup_cb_draw_u8g (void *userdata, font_t *fnt_current, const char *msg)
 {
     struct _uxg_drawu8_data_t * pdata = userdata;
@@ -233,7 +231,7 @@ uxg_DrawWchar (u8g_t *pu8g, unsigned int x, unsigned int y, wchar_t ch, pixel_le
 {
     struct _uxg_drawu8_data_t data;
     font_group_t * group = &g_fontgroup_root;
-    font_t *fnt_default = uxg_GetFont(pu8g);
+    const font_t *fnt_default = uxg_GetFont(pu8g);
 
     if (! uxg_Utf8FontIsInited()) {
         u8g_DrawStrP (pu8g, x, y, PSTR("Err: utf8 font not initialized."));
@@ -269,7 +267,7 @@ uxg_DrawUtf8Str (u8g_t *pu8g, unsigned int x, unsigned int y, const char *utf8_m
 {
     struct _uxg_drawu8_data_t data;
     font_group_t * group = &g_fontgroup_root;
-    font_t *fnt_default = uxg_GetFont(pu8g);
+    const font_t *fnt_default = uxg_GetFont(pu8g);
 
     if (! uxg_Utf8FontIsInited()) {
         u8g_DrawStrP (pu8g, x, y, PSTR("Err: utf8 font not initialized."));
@@ -305,7 +303,7 @@ uxg_DrawUtf8StrP (u8g_t *pu8g, unsigned int x, unsigned int y, const char *utf8_
 {
     struct _uxg_drawu8_data_t data;
     font_group_t * group = &g_fontgroup_root;
-    font_t *fnt_default = uxg_GetFont(pu8g);
+    const font_t *fnt_default = uxg_GetFont(pu8g);
 
     if (! uxg_Utf8FontIsInited()) {
         TRACE ("Error, utf8string not inited!");
@@ -357,7 +355,7 @@ uxg_GetUtf8StrPixelWidth(u8g_t *pu8g, const char *utf8_msg)
 {
     struct _uxg_drawu8_data_t data;
     font_group_t * group = &g_fontgroup_root;
-    font_t *fnt_default = uxg_GetFont(pu8g);
+    const font_t *fnt_default = uxg_GetFont(pu8g);
 
     if (! uxg_Utf8FontIsInited()) {
         TRACE("Err: utf8 font not initialized.");
@@ -388,7 +386,7 @@ uxg_GetUtf8StrPixelWidthP(u8g_t *pu8g, const char *utf8_msg)
 {
     struct _uxg_drawu8_data_t data;
     font_group_t * group = &g_fontgroup_root;
-    font_t *fnt_default = uxg_GetFont(pu8g);
+    const font_t *fnt_default = uxg_GetFont(pu8g);
 
     if (! uxg_Utf8FontIsInited()) {
         TRACE("Err: utf8 font not initialized.");
