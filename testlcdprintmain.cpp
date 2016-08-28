@@ -158,7 +158,7 @@ static int cnt_lcd = 0;
 void
 update_idx ()
 {
-    cnt_lcd = (cnt_lcd + 1) % NUM_TYPE(g_cstr_samples);
+    cnt_lcd = (cnt_lcd + 1) % NUM_ARRAY(g_cstr_samples);
 }
 
 int
@@ -171,7 +171,7 @@ show_lcd(void)
     for (i = 0; i * lcd_glyph_height() < LCD_ROW; i ++) {
         lcd_moveto (0, i * lcd_glyph_height());
         //lcd_moveto (0, (i + 1) * 12);
-        memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
+        memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_ARRAY(g_cstr_samples)], sizeof(PGM_P));
         //TRACE ("call utf8_strlen_p ...");
         sprintf (buf, "%d ", utf8_strlen_p(p)); lcd_print (buf);
         //lcd_printPGM (p);
@@ -181,7 +181,7 @@ show_lcd(void)
     i=0;
     lcd_moveto (10, LCD_ROW / 2);
     TRACE ("show u8g string idx=%d", cnt_lcd);
-    memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_TYPE(g_cstr_samples)], sizeof(PGM_P));
+    memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_ARRAY(g_cstr_samples)], sizeof(PGM_P));
     lcd_printPGM (p);
 #endif
 }

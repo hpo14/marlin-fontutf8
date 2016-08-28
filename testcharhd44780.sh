@@ -15,4 +15,4 @@ main(void)
 }
 EOF
 
-g++ -I. ../test.c lcdprint.c fontutils.cpp  lcdprint_hd44780.cpp && ./a.out
+g++ -g -Wall -I. ../test.c lcdprint.c fontutils.cpp  lcdprint_hd44780.cpp && ./a.out

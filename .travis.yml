@@ -1,0 +1,52 @@
+---
+language: c
+  #
+notifications:
+  email: false
+  #
+before_install:
+  #
+  # Fetch the tag information for the current branch
+  - git fetch origin --tags
+  #
+  # Publish the buildroot script folder
+  - chmod +x ${TRAVIS_BUILD_DIR}/buildroot/bin/*
+  - ln -s ${TRAVIS_BUILD_DIR}/buildroot/bin/ ~/bin
+  #
+  # Start fb X server
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16"
+  - sleep 3
+  - export DISPLAY=:1.0
+  #
+install:
+  #
+  # Install arduino 1.6.9
+  - wget http://downloads-02.arduino.cc/arduino-1.6.9-linux64.tar.xz
+  - tar xf arduino-1.6.9-linux64.tar.xz
+  - sudo mv arduino-1.6.9 /usr/local/share/arduino
+  - ln -s /usr/local/share/arduino/arduino ${TRAVIS_BUILD_DIR}/buildroot/bin/arduino
+  #
+  # Install: LiquidCrystal_I2C library
+  - git clone https://github.com/kiyoshigawa/LiquidCrystal_I2C.git
+  - mv LiquidCrystal_I2C/LiquidCrystal_I2C /usr/local/share/arduino/libraries/LiquidCrystal_I2C
+  #
+  # Install: LiquidTWI2 library
+  - git clone https://github.com/lincomatic/LiquidTWI2.git
+  - sudo mv LiquidTWI2 /usr/local/share/arduino/libraries/LiquidTWI2
+  #
+  # Install: Monochrome Graphics Library for LCDs and OLEDs
+  - arduino --install-library "U8glib"
+  # expose the C API
+  - sudo cp -f $HOME/Arduino/libraries/U8glib/src/clib/u8g.h $HOME/Arduino/libraries/U8glib/src/u8g.h
+  #
+before_script:
+  #
+  # Change current working directory to the build dir
+  - cd ${TRAVIS_BUILD_DIR}
+  #
+script:
+  #
+  # Build with the default configurations
+  #
+  - arduino --verify --board arduino:avr:mega:cpu=atmega2560 testlcdprint.ino
+  #
