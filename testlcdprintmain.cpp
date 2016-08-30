@@ -200,6 +200,8 @@ show_lcd(void)
 
 #include LANGUAGE_DATA_INCL(LCD_LANGUAGE)
 
+#include "dogm_font_data_ISO10646_1.h"
+#define FONT_MENU_NAME ISO10646_1_5x7
 
 #define OLED_SPI1_CS   10   //   ---   x Not exist
 #define OLED_SPI1_DC    8   //   D/C   pin# 6 (data or command)
@@ -236,6 +238,7 @@ setup_lcd ()
 
     pu8g = &u8g;
     u8g_prepare(pu8g);
+    u8g.setFont(FONT_MENU_NAME);
     uxg_SetUtf8Fonts (g_fontinfo, NUM_ARRAY(g_fontinfo));
 }
 
@@ -248,13 +251,22 @@ lcd_update (void)
     clear_lcd ();
     u8g.firstPage();
     do {
-#if 1
+#if 0
         show_lcd();
 #else
-        //uxg_DrawUtf8StrP(pu8g1, 10, 32, c01, 10000);
-        lcd_moveto (10, 32);
-        lcd_printPGM (c01);
+        lcd_moveto (5, 20);
+        lcd_print (LCD_STR_BEDTEMP); //lcd_print_wchar (LCD_STR_BEDTEMP[0]);
+        lcd_print (LCD_STR_DEGREE);
+        lcd_print (LCD_STR_THERMOMETER);
+        lcd_print (LCD_STR_UPLEVEL);
+        lcd_print (LCD_STR_REFRESH);
+        lcd_print (LCD_STR_FOLDER);
+        lcd_print (LCD_STR_FEEDRATE);
+        lcd_print (LCD_STR_CLOCK);
 
+        //uxg_DrawUtf8StrP(pu8g1, 10, 32, c01, 10000);
+        lcd_moveto (5, 40);
+        lcd_printPGM (c01);
 #endif
     } while( u8g.nextPage() );
     update_idx ();
@@ -360,14 +372,14 @@ static byte folder[8] = {
 void
 createchar_lcd ()
 {
-    lcd.createChar(0x00, bedTemp);
-    lcd.createChar(0x01, degree);
-    lcd.createChar(0x02, thermometer);
-    lcd.createChar(0x03, uplevel);
-    lcd.createChar(0x04, refresh);
-    lcd.createChar(0x05, folder);
-    lcd.createChar(0x06, feedrate);
-    lcd.createChar(0x07, clock);
+    lcd.createChar(LCD_STR_BEDTEMP[0], bedTemp);
+    lcd.createChar(LCD_STR_DEGREE[0], degree);
+    lcd.createChar(LCD_STR_THERMOMETER[0], thermometer);
+    lcd.createChar(LCD_STR_UPLEVEL[0], uplevel);
+    lcd.createChar(LCD_STR_REFRESH[0], refresh);
+    lcd.createChar(LCD_STR_FOLDER[0], folder);
+    lcd.createChar(LCD_STR_FEEDRATE[0], feedrate);
+    lcd.createChar(LCD_STR_CLOCK[0], clock);
 }
 
 void
@@ -383,7 +395,18 @@ setup_lcd ()
     //lcd_print ("hello"); lcd_print_wchar ('-');
     //lcd_printPGM (PSTR("HELLO"));
     //test_show_uchar();
-    lcd_printPGM (c28);
+
+    lcd_print_wchar (LCD_STR_BEDTEMP[0]);
+    lcd_print (LCD_STR_DEGREE);
+    lcd_print (LCD_STR_THERMOMETER);
+    lcd_print (LCD_STR_UPLEVEL);
+    lcd_print (LCD_STR_REFRESH);
+    lcd_print (LCD_STR_FOLDER);
+    lcd_print (LCD_STR_FEEDRATE);
+    lcd_print (LCD_STR_CLOCK);
+
+    //lcd_moveto (0,1);
+    //lcd_printPGM (c28);
 #endif
 }
 
