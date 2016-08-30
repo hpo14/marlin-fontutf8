@@ -7,6 +7,8 @@
  * @copyright GPL/BSD
  */
 
+#include "Marlin.h"
+
 #include "fontutils.h"
 
 uint8_t
@@ -35,8 +37,9 @@ serial_printf_P (const char *format, ...)
     vsnprintf_P(buff,sizeof(buff),format,args);
     va_end (args);
     buff[sizeof(buff)/sizeof(buff[0])-1]='\0';
-    Serial.print(buff);
-    //delay (1000);
+
+    //Serial.print(buff);
+    SERIAL_ECHO (buff); SERIAL_EOL;
 }
 #endif
 #endif
@@ -251,6 +254,7 @@ get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval)
     return p;
 }
 
+// uint8_t * get_utf8_value_cb (uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t *pval);
 int
 utf8_strlen_cb (const char *pstart, read_byte_cb_t cb_read_byte)
 {
@@ -267,7 +271,7 @@ utf8_strlen_cb (const char *pstart, read_byte_cb_t cb_read_byte)
             break;
         }
         cnt ++;
-        //TRACE ("cnt=%d, ch=0x%X", cnt, (int)ch);
+        TRACE ("cnt=%d, ch=0x%X", cnt, ch);
     }
     return cnt;
 }

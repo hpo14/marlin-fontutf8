@@ -8,8 +8,8 @@
 
 
 //#define LCD_LANGUAGE en
-#define LCD_LANGUAGE cn
-//#define LCD_LANGUAGE jp
+//#define LCD_LANGUAGE cn
+#define LCD_LANGUAGE jp
 //#define LCD_LANGUAGE ru
 
 
@@ -18,11 +18,13 @@
 #define WESTERN  2
 #define CYRILLIC 3
 
+#if LCD_LANGUAGE == jp
 #define DISPLAY_CHARSET_HD44780 JAPANESE
-//#define DISPLAY_CHARSET_HD44780 WESTERN
-//#define DISPLAY_CHARSET_HD44780 CYRILLIC
-
-
+#elif LCD_LANGUAGE == ru
+#define DISPLAY_CHARSET_HD44780 CYRILLIC
+#else
+#define DISPLAY_CHARSET_HD44780 WESTERN
+#endif
 
 #define SERIAL_ECHO(a) Serial.print(a)
 #define SERIAL_EOL Serial.println("")

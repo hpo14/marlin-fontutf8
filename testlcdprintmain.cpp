@@ -138,7 +138,12 @@ const char c24[] PROGMEM = MSG_SAMPLE2_CNZH;
 const char c25[] PROGMEM = MSG_SAMPLE2_CNTW;
 const char c26[] PROGMEM = MSG_SAMPLE2_FR;
 
-const char c27[] PROGMEM = _UxGT("日語千万円");
+const char c27[] PROGMEM = _UxGT("千万円");
+const char c28[] PROGMEM = _UxGT("→↰↻⏱°🌡📂");
+const char c29[] PROGMEM = _UxGT("⌚⌛⏰⏱⏳⧖⧗→↰");
+const char c30[] PROGMEM = _UxGT("°🌡➤📁📂↻↺⟳⟲⮈⮊⮋⮉⮥⮭⇧↑");
+const char c31[] PROGMEM = _UxGT("🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛");
+const char c32[] PROGMEM = _UxGT("🕜🕝🕞🕟🕠🕡🕢🕣🕤🕥🕦🕧");
 
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
@@ -151,7 +156,7 @@ PGM_P const g_cstr_samples[] PROGMEM = {
     c11,c12,c13,c14,c15,c16,
     c21,c22,c23,c24,c25,c26,
 #endif
-    c27,
+    c27,c28,c29,//c30,c31
 };
 
 static int cnt_lcd = 0;
@@ -263,20 +268,122 @@ lcd_update (void)
 //    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
 LiquidCrystal lcd(PIN_LCD_RS, PIN_LCD_RW, PIN_LCD_EN,   PIN_LCD_D4, PIN_LCD_D5, PIN_LCD_D6, PIN_LCD_D7);
 
-extern void test_show_uchar();
+// from Marlin:
+static byte bedTemp[8] = {
+    B00000,
+    B11111,
+    B10101,
+    B10001,
+    B10101,
+    B11111,
+    B00000,
+    B00000
+}; //thanks Sonny Mounicou
+
+static byte degree[8] = {
+    B01100,
+    B10010,
+    B10010,
+    B01100,
+    B00000,
+    B00000,
+    B00000,
+    B00000
+};
+
+static byte thermometer[8] = {
+    B00100,
+    B01010,
+    B01010,
+    B01010,
+    B01010,
+    B10001,
+    B10001,
+    B01110
+};
+
+static byte feedrate[8] = {
+    B11100,
+    B10000,
+    B11000,
+    B10111,
+    B00101,
+    B00110,
+    B00101,
+    B00000
+}; //thanks Sonny Mounicou
+
+static byte clock[8] = {
+    B00000,
+    B01110,
+    B10011,
+    B10101,
+    B10001,
+    B01110,
+    B00000,
+    B00000
+}; //thanks Sonny Mounicou
+
+static byte uplevel[8] = {
+    B00100,
+    B01110,
+    B11111,
+    B00100,
+    B11100,
+    B00000,
+    B00000,
+    B00000
+}; //thanks joris
+
+static byte refresh[8] = {
+    B00000,
+    B00110,
+    B11001,
+    B11000,
+    B00011,
+    B10011,
+    B01100,
+    B00000,
+}; //thanks joris
+
+static byte folder[8] = {
+    B00000,
+    B11100,
+    B11111,
+    B10001,
+    B10001,
+    B11111,
+    B00000,
+    B00000
+}; //thanks joris
+
+void
+createchar_lcd ()
+{
+    lcd.createChar(0x00, bedTemp);
+    lcd.createChar(0x01, degree);
+    lcd.createChar(0x02, thermometer);
+    lcd.createChar(0x03, uplevel);
+    lcd.createChar(0x04, refresh);
+    lcd.createChar(0x05, folder);
+    lcd.createChar(0x06, feedrate);
+    lcd.createChar(0x07, clock);
+}
 
 void
 setup_lcd ()
 {
     //pinMode(9, OUTPUT);digitalWrite (9, LOW);
     // set up the LCD's number of columns and rows:
+    createchar_lcd();
     lcd.begin(LCD_COL, LCD_ROW);
 #if DEBUG
     // Print a message to the LCD.
     //lcd.print("hello, world!");
-    lcd_print ("hello"); lcd_print_wchar ('-');
-    lcd_printPGM (PSTR("HELLO"));
-    test_show_uchar();
+    //lcd_print ("hello"); lcd_print_wchar ('-');
+    //lcd_printPGM (PSTR("HELLO"));
+    //test_show_uchar();
+    lcd_printPGM (c28);
 #endif
 }
 
@@ -284,6 +391,9 @@ void
 clear_lcd ()
 {
     lcd.clear();
+    lcd_moveto(0,0); lcd_print ("                ");
+    lcd_moveto(0,1); lcd_print ("                ");
+    lcd_moveto(0,0);
 }
 
 void
@@ -323,7 +433,7 @@ void
 loop(void)
 {
     unsigned long now = millis();
-    if (pre_tm_lcd + 1000 < now) {
+    if (pre_tm_lcd + 2000 < now) {
         pre_tm_lcd = now;
 
         lcd_update();
