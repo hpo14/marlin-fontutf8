@@ -1,5 +1,5 @@
-#ifndef LANGUAGE_CN_H
-#define LANGUAGE_CN_H 1
+#ifndef LANGUAGE_ZH_CN_H
+#define LANGUAGE_ZH_CN_H 1
 
 #define MACHINE_NAME _UxGT("3D打印机") //_UxGT("3D Printer")
 
@@ -10,4 +10,4 @@
 #define MSG_MAIN                            _UxGT("主菜单") //_UxGT("Main")
 #define MSG_AUTOSTART                       _UxGT("自动启动") //_UxGT("Autostart")
 
-#endif // LANGUAGE_CN_H
+#endif // LANGUAGE_ZH_CN_H
