@@ -83,8 +83,11 @@
 #define PIN_ROTARY_A   A1
 #define PIN_ROTARY_B   A2
 
+#if ENABLED(DOGLCD)
+#define LCD_COL 128
+#define LCD_ROW  64
 
-#if USE_HD44780
+#else
 #define LCD_COL 16
 #define LCD_ROW  2
 
@@ -95,9 +98,6 @@
 #define LCD_ROW  4
 #endif
 
-#else
-#define LCD_COL 128
-#define LCD_ROW  64
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -145,8 +145,23 @@ const char c30[] PROGMEM = _UxGT("°🌡➤📁📂↻↺⟳⟲⮈⮊⮋⮉⮥�
 const char c31[] PROGMEM = _UxGT("🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛");
 const char c32[] PROGMEM = _UxGT("🕜🕝🕞🕟🕠🕡🕢🕣🕤🕥🕦🕧");
 
+#define STRG_E382_a _UxGT("゠ァアィイゥウェエォオカガキギク")
+#define STRG_E383_a _UxGT("ムメモャヤュユョヨラリルレロヮワ")
+#define STRG_C3_8 _UxGT("ÈÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ")
+#define STRG_C3_a _UxGT("àáâãäåæçèéêëìíîï")
+#define STRG_D0_9 _UxGT("АБВГДЕЖЗИЙКЛМНОП")
+#define STRG_D0_b _UxGT("абвгдежзийклмноп")
+#define MSG_WATCH                           "wt:" STRG_C3_a STRG_C3_8 //_UxGT("Display test")
+#define MSG_PREPARE                         "ru:" STRG_D0_9 STRG_D0_b
+#define MSG_CONTROL                         _UxGT("ja:ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ")
+const char c41[] PROGMEM = MSG_WATCH;
+const char c42[] PROGMEM = MSG_PREPARE;
+const char c43[] PROGMEM = MSG_CONTROL;
+
 //const char * const g_cstr_samples[] PROGMEM = {
 PGM_P const g_cstr_samples[] PROGMEM = {
+c41,c42,c43,
+#if 0
     //PSTR(MSG_SAMPLE2_FR),
     c00,
     c01,c02,c03,c04,c05,c06,
@@ -157,15 +172,44 @@ PGM_P const g_cstr_samples[] PROGMEM = {
     c21,c22,c23,c24,c25,c26,
 #endif
     c27,c28,c29,//c30,c31
+#endif
 };
+
+#define SHOW_ASCII 0
 
 static int cnt_lcd = 0;
 void
 update_idx ()
 {
+#if SHOW_ASCII
+    cnt_lcd = (cnt_lcd + 1) % ((256 + LCD_COL * LCD_ROW - 1) / (LCD_COL * LCD_ROW));
+#else
     cnt_lcd = (cnt_lcd + 1) % NUM_ARRAY(g_cstr_samples);
+#endif
 }
 
+#if SHOW_ASCII
+void
+show_ascii (int page)
+{
+    int i;
+    int j;
+    unsigned char c = page * (LCD_COL * LCD_ROW);
+    for (i = 0; i < LCD_COL; i ++) {
+        for (j = 0; j < LCD_ROW; j ++) {
+            lcd_print_wchar ((wchar_t)c);
+            c ++;
+        }
+    }
+}
+
+int
+show_lcd(void)
+{
+    show_ascii (cnt_lcd);
+}
+
+#else
 int
 show_lcd(void)
 {
@@ -175,12 +219,20 @@ show_lcd(void)
 #if 1
     for (i = 0; i * lcd_glyph_height() < LCD_ROW; i ++) {
         lcd_moveto (0, i * lcd_glyph_height());
-        //lcd_moveto (0, (i + 1) * 12);
         memcpy_P(&p, &g_cstr_samples[(cnt_lcd + i) % NUM_ARRAY(g_cstr_samples)], sizeof(PGM_P));
-        //TRACE ("call utf8_strlen_p ...");
-        sprintf (buf, "%d ", utf8_strlen_p(p)); lcd_print (buf);
-        //lcd_printPGM (p);
-        utf8_strncpy_p (buf, p, sizeof(buf)); lcd_print (buf);
+#if 1
+        lcd_printstr_P (p, LCD_COL);
+#else
+        TRACE ("call utf8_strlen_p ...");
+        sprintf (buf, "%d ", utf8_strlen_p(p));
+        lcd_printstr (buf, LCD_COL);
+        utf8_strncpy_p (buf, p, sizeof(buf));
+        lcd_printstr (buf, LCD_COL - 3);
+#if DEBUG
+        TRACE ("small delay for debug");
+        delay (500); // small delay for debug
+#endif
+#endif
     }
 #else
     i=0;
@@ -190,6 +242,7 @@ show_lcd(void)
     lcd_printPGM (p);
 #endif
 }
+#endif
 
 ////////////////////////////////////////////////////////////
 
@@ -251,7 +304,7 @@ lcd_update (void)
     clear_lcd ();
     u8g.firstPage();
     do {
-#if 0
+#if 1
         show_lcd();
 #else
         lcd_moveto (5, 20);
@@ -422,9 +475,13 @@ clear_lcd ()
 void
 lcd_update (void)
 {
+    TRACE ("clear_lcd");
     clear_lcd ();
+    TRACE ("show_lcd");
     show_lcd();
+    TRACE ("update_idx");
     update_idx ();
+    TRACE ("lcd_update DONE");
 }
 
 #endif // DOGLCD
@@ -456,7 +513,7 @@ void
 loop(void)
 {
     unsigned long now = millis();
-    if (pre_tm_lcd + 2000 < now) {
+    if (pre_tm_lcd + 1000 < now) {
         pre_tm_lcd = now;
 
         lcd_update();

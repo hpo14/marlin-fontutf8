@@ -2,15 +2,17 @@
 #define _SYS_MARLIN_H
 
 
-#define U8GLIB_SSD1306 1
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER 1
+//#define U8GLIB_SSD1306 1
+#define REPRAP_DISCOUNT_SMART_CONTROLLER 1
 //#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER 1
 
 
 //#define LCD_LANGUAGE en
-//#define LCD_LANGUAGE cn
+//#define LCD_LANGUAGE zh_CN
+//#define LCD_LANGUAGE zh_TW
 #define LCD_LANGUAGE jp
 //#define LCD_LANGUAGE ru
+//#define LCD_LANGUAGE de
 
 
 // the definitions from Marlin
