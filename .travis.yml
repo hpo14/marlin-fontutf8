@@ -27,12 +27,12 @@ install:
   #- ln -s /usr/local/share/arduino/arduino ${TRAVIS_BUILD_DIR}/buildroot/bin/arduino
   #
   # Install: LiquidCrystal_I2C library
-  - git clone https://github.com/kiyoshigawa/LiquidCrystal_I2C.git
-  - mv LiquidCrystal_I2C/LiquidCrystal_I2C /usr/local/share/arduino/libraries/LiquidCrystal_I2C
+  #- git clone https://github.com/kiyoshigawa/LiquidCrystal_I2C.git
+  #- mv LiquidCrystal_I2C/LiquidCrystal_I2C /usr/local/share/arduino/libraries/LiquidCrystal_I2C
   #
   # Install: LiquidTWI2 library
-  - git clone https://github.com/lincomatic/LiquidTWI2.git
-  - sudo mv LiquidTWI2 /usr/local/share/arduino/libraries/LiquidTWI2
+  #- git clone https://github.com/lincomatic/LiquidTWI2.git
+  #- sudo mv LiquidTWI2 /usr/local/share/arduino/libraries/LiquidTWI2
   #
   # Install: Monochrome Graphics Library for LCDs and OLEDs
   - /usr/local/share/arduino/arduino --install-library "U8glib"
