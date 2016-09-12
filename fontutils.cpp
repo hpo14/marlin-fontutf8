@@ -271,7 +271,7 @@ utf8_strlen_cb (const char *pstart, read_byte_cb_t cb_read_byte)
             break;
         }
         cnt ++;
-        TRACE ("cnt=%d, ch=0x%X", cnt, ch);
+        TRACE ("cnt=%d, ch=0x%X", cnt, (int)ch);
     }
     return cnt;
 }

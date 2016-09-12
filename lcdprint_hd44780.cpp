@@ -156,7 +156,7 @@ static const hd44780_charmap_t g_hd44780_charmap[] PROGMEM = {
     {IV('」'), 0xA3, 0},
     {IV('゛'), 0xDE, 0}, // ‶
     {IV('゜'), 0xDF, 0}, // '〫' 
-    {IV('゠'), ' ', 0},
+    {IV('゠'), '=', 0},
     {IV('ァ'), 0xA7, 0},
     {IV('ア'), 0xB1, 0},
     {IV('ィ'), 0xA8, 0},
