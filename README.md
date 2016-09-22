@@ -22,5 +22,6 @@ So you'd best to put the source folder in Marlin source folder,
 to access the required font tools.
 
 
-
+Try the local docker if travis meet error:
+https://docs.travis-ci.com/user/common-build-problems/#Troubleshooting-Locally-in-a-Docker-Image
 
